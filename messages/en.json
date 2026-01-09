@@ -1,0 +1,55 @@
+{
+  "nav": {
+    "brand": "Crumbs O' Bliss",
+    "home": "Home",
+    "items": "Items",
+    "about": "About",
+    "terms": "Terms",
+    "cart": "Cart"
+  },
+  "hero": {
+    "title": "Artisan Baked Perfection",
+    "subtitle": "Fresh, honest, small-batch baked goods made with time-tested techniques",
+    "cta": "Explore Our Collection"
+  },
+  "items": {
+    "title": "Our Creations",
+    "description": "Handcrafted with care, each item is a testament to our passion for baking"
+  },
+  "item": {
+    "price": "Price",
+    "ingredients": "Ingredients",
+    "calories": "Calories per serving",
+    "buyNow": "Buy Now",
+    "addToCart": "Add to Cart"
+  },
+  "about": {
+    "title": "About Crumbs O' Bliss",
+    "description": "Crumbs O' Bliss is an artisan bakery focused on fresh, honest, small-batch baked goods made with time-tested techniques and thoughtfully sourced ingredients. Baking is treated as both science and soul, balancing precision with warmth and care. Every item we create reflects our commitment to quality and our dedication to bringing joy through exceptional baked goods.",
+    "mission": "Our Mission",
+    "missionText": "To create exceptional baked goods that celebrate the art and craft of traditional baking while building a warm community around the love of fresh, quality food."
+  },
+  "terms": {
+    "title": "Terms and Conditions",
+    "lastUpdated": "Last updated",
+    "section1": "Use License",
+    "section1Text": "Permission is granted to temporarily download one copy of the materials on Crumbs O' Bliss website for personal, non-commercial transitory viewing only.",
+    "section2": "Disclaimer",
+    "section2Text": "The materials on our website are provided on an 'as is' basis. We make no warranties, expressed or implied, and hereby disclaim and negate all other warranties including, without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.",
+    "section3": "Limitations",
+    "section3Text": "In no event shall Crumbs O' Bliss or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on the Crumbs O' Bliss website."
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "empty": "Your cart is empty",
+    "continue": "Continue Shopping",
+    "total": "Total",
+    "checkout": "Proceed to Checkout"
+  },
+  "footer": {
+    "brand": "Crumbs O' Bliss",
+    "description": "Artisan bakery specializing in fresh, honest, small-batch baked goods",
+    "links": "Quick Links",
+    "rights": "All rights reserved"
+  }
+}
