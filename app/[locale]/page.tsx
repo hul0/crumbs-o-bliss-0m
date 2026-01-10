@@ -1,7 +1,9 @@
+
 import type { Metadata } from "next"
 import Link from "next/link"
 import Image from "next/image"
 import { getTranslations } from "next-intl/server"
+import LightRays from "@/components/LightRays"
 
 export const metadata: Metadata = {
   title: "Crumbs O' Bliss | Home",
@@ -16,6 +18,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     <div className="w-full">
       {/* Hero Section */}
       <section className="py-20 md:py-32 px-4 bg-gradient-to-b from-card to-background">
+         
         <div className="max-w-6xl mx-auto text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6 text-balance text-primary">{t("hero.title")}</h1>
           <p className="text-lg md:text-xl text-muted-foreground mb-8 text-balance max-w-3xl mx-auto">
