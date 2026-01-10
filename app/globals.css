@@ -42,6 +42,42 @@
   --sidebar-accent-foreground: #000000;
   --sidebar-border: var(--border-light);
   --sidebar-ring: var(--primary);
+
+  /* --- LANDING PAGE SPECIFIC VARIABLES (Light Mode) --- */
+  --hero-bg-start: #fffbeb; /* amber-50 */
+  --hero-bg-via: #fff7ed;   /* orange-50 */
+  --hero-bg-end: #fff1f2;   /* rose-50 */
+  
+  --blob-1: #fde68a; /* amber-200 */
+  --blob-2: #fecdd3; /* rose-200 */
+  --blob-3: #fed7aa; /* orange-200 */
+
+  --text-heading-grad-from: #78350f; /* amber-900 */
+  --text-heading-grad-via: #9a3412;  /* orange-800 */
+  --text-heading-grad-to: #881337;   /* rose-900 */
+  
+  --text-body-color: #374151; /* gray-700 */
+  --divider-color: #fbbf24;   /* amber-400 */
+  
+  --badge-bg: rgba(255, 255, 255, 0.8);
+  --badge-border: #fde68a; /* amber-200 */
+  --badge-text: #78350f;   /* amber-900 */
+  --badge-icon: #f59e0b;   /* amber-500 */
+  
+  --btn-primary-start: #d97706; /* amber-600 */
+  --btn-primary-end: #ea580c;   /* orange-600 */
+  --btn-shadow: rgba(245, 158, 11, 0.5);
+  
+  --lp-card-bg: #ffffff;
+  --lp-card-border: #fef3c7; /* amber-100 */
+  --lp-card-border-hover: #fcd34d; /* amber-300 */
+  
+  --feat-bg-start: #ffffff;
+  --feat-bg-end: rgba(255, 251, 235, 0.3); /* amber-50/30 */
+  
+  --brand-bg-start: #78350f; /* amber-900 */
+  --brand-bg-via: #7c2d12;   /* orange-900 */
+  --brand-bg-end: #881337;   /* rose-900 */
 }
 
 /* Bakery color system for dark mode */
@@ -82,6 +118,42 @@
   --sidebar-accent-foreground: #0f1f1b;
   --sidebar-border: var(--border-light);
   --sidebar-ring: var(--primary);
+
+  /* --- LANDING PAGE SPECIFIC VARIABLES (Dark Mode) --- */
+  --hero-bg-start: #0c0a09; /* stone-950 */
+  --hero-bg-via: #1c1917;   /* stone-900 */
+  --hero-bg-end: #292524;   /* stone-800 */
+  
+  --blob-1: #451a03; /* amber-950/deep */
+  --blob-2: #4c0519; /* rose-950/deep */
+  --blob-3: #431407; /* orange-950/deep */
+
+  --text-heading-grad-from: #fef3c7; /* amber-100 */
+  --text-heading-grad-via: #ffedd5;  /* orange-100 */
+  --text-heading-grad-to: #ffe4e6;   /* rose-100 */
+  
+  --text-body-color: #d6d3d1; /* stone-300 */
+  --divider-color: #d97706;   /* amber-600 */
+  
+  --badge-bg: rgba(28, 25, 23, 0.8);
+  --badge-border: #78350f; /* amber-900 */
+  --badge-text: #fcd34d;   /* amber-300 */
+  --badge-icon: #fbbf24;   /* amber-400 */
+  
+  --btn-primary-start: #b45309; /* amber-700 */
+  --btn-primary-end: #c2410c;   /* orange-700 */
+  --btn-shadow: rgba(0, 0, 0, 0.5);
+  
+  --lp-card-bg: #1c1917; /* stone-900 */
+  --lp-card-border: #44403c; /* stone-700 */
+  --lp-card-border-hover: #d97706; /* amber-600 */
+  
+  --feat-bg-start: #0c0a09;
+  --feat-bg-end: #1c1917;
+  
+  --brand-bg-start: #0f0f0f;
+  --brand-bg-via: #1a1a1a;
+  --brand-bg-end: #262626;
 }
 
 @theme inline {
