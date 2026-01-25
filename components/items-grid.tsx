@@ -3,9 +3,29 @@
 import { useState, useMemo } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { Search, X, SlidersHorizontal, ChevronDown } from "lucide-react"
+import { Search, X, SlidersHorizontal, ChevronDown, Filter, Star } from "lucide-react"
+import { 
+  Playfair_Display, 
+  Cinzel, 
+  Cormorant_Garamond, 
+  Prata, 
+  Old_Standard_TT, 
+  Italiana, 
+  Bodoni_Moda,
+  Unna
+} from 'next/font/google'
 
-// Define interface locally to match the structure used in this component
+// --- 8 Classical Stylish Fonts ---
+const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-playfair' })
+const cinzel = Cinzel({ subsets: ['latin'], variable: '--font-cinzel' })
+const cormorant = Cormorant_Garamond({ weight: ['400', '500', '600', '700'], subsets: ['latin'], variable: '--font-cormorant' })
+const prata = Prata({ weight: '400', subsets: ['latin'], variable: '--font-prata' })
+const oldStandard = Old_Standard_TT({ weight: ['400', '700'], subsets: ['latin'], variable: '--font-old-standard' })
+const italiana = Italiana({ weight: '400', subsets: ['latin'], variable: '--font-italiana' })
+const bodoni = Bodoni_Moda({ subsets: ['latin'], variable: '--font-bodoni' })
+const unna = Unna({ weight: ['400', '700'], subsets: ['latin'], variable: '--font-unna' })
+
+// --- Types ---
 interface BakeryItem {
   slug: string
   name: { en: string; bn: string }
@@ -61,7 +81,7 @@ export function ItemsGrid({ items, locale }: ItemsGridProps) {
           item.name.bn.includes(query) ||
           item.description.en.toLowerCase().includes(query)
 
-        // Tag Filter (AND logic - item must have ALL selected tags)
+        // Tag Filter (AND logic)
         const matchesTags =
           selectedTags.length === 0 ||
           selectedTags.every((tag) => item.tags.includes(tag))
@@ -82,10 +102,8 @@ export function ItemsGrid({ items, locale }: ItemsGridProps) {
       })
   }, [items, searchQuery, selectedTags, sortBy])
 
-  // Check if any filters are active
   const hasActiveFilters = searchQuery || selectedTags.length > 0 || sortBy !== "default"
 
-  // Clear all filters
   const resetFilters = () => {
     setSearchQuery("")
     setSelectedTags([])
@@ -93,231 +111,237 @@ export function ItemsGrid({ items, locale }: ItemsGridProps) {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Controls Section */}
-      <div className="bg-card border border-border rounded-xl shadow-sm overflow-hidden">
-        {/* Top Bar */}
-        <div className="p-4 md:p-6 space-y-4">
-          <div className="flex flex-col sm:flex-row gap-3">
-            {/* Search Bar */}
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-              <input
-                type="text"
-                placeholder={
-                  locale === "en" ? "Search by name or description..." : "নাম বা বর্ণনা দ্বারা খুঁজুন..."
-                }
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-10 py-2.5 bg-background border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                  aria-label="Clear search"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              )}
-            </div>
+    <div className={`
+      ${playfair.variable} ${cinzel.variable} ${cormorant.variable} 
+      ${prata.variable} ${oldStandard.variable} ${italiana.variable} 
+      ${bodoni.variable} ${unna.variable}
+      min-h-screen bg-[#FDFBF7] text-[#2C241B] space-y-12 pb-20
+    `}>
+      
+      {/* --- Classical Controls Dashboard --- */}
+      <div className="relative">
+        {/* Decorative Top Border */}
+        <div className="h-1 w-full bg-[#2C241B] mb-1"></div>
+        <div className="h-0.5 w-full bg-[#D4AF37] mb-6"></div>
 
-            {/* Sort and Filter Toggle */}
-            <div className="flex gap-2">
-              <div className="relative flex-1 sm:flex-none sm:min-w-[200px]">
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value as SortOption)}
-                  className="w-full appearance-none px-4 py-2.5 pr-10 bg-background border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all cursor-pointer"
-                >
-                  <option value="default">Featured</option>
-                  <option value="price-asc">Price: Low to High</option>
-                  <option value="price-desc">Price: High to Low</option>
-                  <option value="calories-asc">Calories: Low to High</option>
-                </select>
-                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+        <div className="bg-[#2C241B] text-[#FDFBF7] p-6 md:p-8 shadow-2xl relative overflow-hidden">
+           {/* Subtle Texture Overlay */}
+           <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/black-linen.png')]"></div>
+
+           <div className="relative z-10 space-y-6">
+              <div className="flex flex-col lg:flex-row gap-6 items-end lg:items-center justify-between">
+                
+                {/* Search Input - Classical Style */}
+                <div className="w-full lg:w-1/3 group">
+                   <label className="font-cinzel text-[#D4AF37] text-xs tracking-[0.2em] uppercase mb-2 block">Search Catalogue</label>
+                   <div className="relative border-b-2 border-[#D4AF37]/30 group-focus-within:border-[#D4AF37] transition-colors pb-1">
+                      <Search className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-5 text-[#D4AF37]" />
+                      <input
+                        type="text"
+                        placeholder={locale === "en" ? "Search delicacies..." : "অনুসন্ধান করুন..."}
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full pl-8 pr-8 py-2 bg-transparent text-[#FDFBF7] font-cormorant text-xl placeholder:text-[#FDFBF7]/30 focus:outline-none"
+                      />
+                      {searchQuery && (
+                        <button onClick={() => setSearchQuery("")} className="absolute right-0 top-1/2 -translate-y-1/2 text-[#D4AF37] hover:text-white">
+                          <X className="h-4 w-4" />
+                        </button>
+                      )}
+                   </div>
+                </div>
+
+                {/* Filters & Sort Controls */}
+                <div className="flex flex-wrap gap-4 items-center w-full lg:w-auto">
+                    
+                    {/* Sort Dropdown */}
+                    <div className="relative min-w-[220px]">
+                       <label className="font-cinzel text-[#D4AF37] text-xs tracking-[0.2em] uppercase mb-1 block">Arrangement</label>
+                       <div className="relative">
+                          <select
+                            value={sortBy}
+                            onChange={(e) => setSortBy(e.target.value as SortOption)}
+                            className="w-full appearance-none bg-[#3E3429] border border-[#5D4E3C] text-[#FDFBF7] pl-4 pr-10 py-3 font-italiana text-lg cursor-pointer hover:border-[#D4AF37] transition-colors focus:outline-none"
+                          >
+                            <option value="default">Curator's Choice</option>
+                            <option value="price-asc">Price: Ascending</option>
+                            <option value="price-desc">Price: Descending</option>
+                            <option value="calories-asc">Lightest First</option>
+                          </select>
+                          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#D4AF37] pointer-events-none" />
+                       </div>
+                    </div>
+
+                    {/* Filter Toggle Button */}
+                    <div className="flex flex-col justify-end h-full mt-auto">
+                      <button
+                        onClick={() => setShowFilters(!showFilters)}
+                        className={`h-[52px] px-6 border transition-all flex items-center gap-3 font-cinzel text-sm tracking-widest uppercase ${
+                          showFilters
+                            ? "bg-[#D4AF37] text-[#2C241B] border-[#D4AF37] font-bold"
+                            : "bg-transparent text-[#D4AF37] border-[#D4AF37] hover:bg-[#D4AF37]/10"
+                        }`}
+                      >
+                        <SlidersHorizontal className="h-4 w-4" />
+                        <span>Filters</span>
+                        {selectedTags.length > 0 && (
+                          <span className="ml-1 bg-[#2C241B] text-[#D4AF37] w-5 h-5 flex items-center justify-center text-[10px] rounded-full">
+                            {selectedTags.length}
+                          </span>
+                        )}
+                      </button>
+                    </div>
+                </div>
               </div>
 
-              <button
-                onClick={() => setShowFilters(!showFilters)}
-                className={`px-4 py-2.5 rounded-lg border transition-all flex items-center gap-2 ${
-                  showFilters
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-background border-input hover:bg-accent"
-                }`}
-              >
-                <SlidersHorizontal className="h-4 w-4" />
-                <span className="hidden sm:inline">Filters</span>
-                {selectedTags.length > 0 && (
-                  <span className="bg-background/20 px-2 py-0.5 rounded-full text-xs font-semibold">
-                    {selectedTags.length}
-                  </span>
-                )}
-              </button>
-            </div>
-          </div>
+              {/* Active Filters Display */}
+              {hasActiveFilters && (
+                <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-[#D4AF37]/20 font-unna">
+                  <span className="text-[#D4AF37] italic text-lg pr-2">Active Selections:</span>
+                  
+                  {searchQuery && (
+                    <span className="inline-flex items-center gap-2 px-3 py-1 bg-[#FDFBF7] text-[#2C241B] border border-[#D4AF37]">
+                      <span className="font-cormorant text-lg">"{searchQuery}"</span>
+                      <button onClick={() => setSearchQuery("")}><X className="h-3 w-3 hover:scale-110" /></button>
+                    </span>
+                  )}
+                  
+                  {selectedTags.map((tag) => (
+                    <span key={tag} className="inline-flex items-center gap-2 px-3 py-1 bg-[#3E3429] text-[#FDFBF7] border border-[#5D4E3C]">
+                      <span className="font-cormorant text-lg capitalize">{tag.replace("-", " ")}</span>
+                      <button onClick={() => toggleTag(tag)}><X className="h-3 w-3 hover:text-[#D4AF37]" /></button>
+                    </span>
+                  ))}
 
-          {/* Active Filters Summary */}
-          {hasActiveFilters && (
-            <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-border/50">
-              <span className="text-xs font-medium text-muted-foreground">Active:</span>
-              {searchQuery && (
-                <span className="inline-flex items-center gap-1 px-2 py-1 bg-primary/10 text-primary text-xs rounded-md">
-                  Search: "{searchQuery}"
-                  <button onClick={() => setSearchQuery("")} className="hover:text-primary/70">
-                    <X className="h-3 w-3" />
+                  <button onClick={resetFilters} className="ml-auto text-[#D4AF37] hover:text-white font-cinzel text-xs tracking-widest border-b border-[#D4AF37] pb-0.5">
+                    Clear All
                   </button>
-                </span>
+                </div>
               )}
-              {selectedTags.map((tag) => (
-                <span
-                  key={tag}
-                  className="inline-flex items-center gap-1 px-2 py-1 bg-accent text-accent-foreground text-xs rounded-md capitalize"
-                >
-                  {tag.replace("-", " ")}
-                  <button onClick={() => toggleTag(tag)} className="hover:text-accent-foreground/70">
-                    <X className="h-3 w-3" />
-                  </button>
-                </span>
-              ))}
-              {sortBy !== "default" && (
-                <span className="inline-flex items-center gap-1 px-2 py-1 bg-muted text-muted-foreground text-xs rounded-md">
-                  {sortBy === "price-asc" && "Price ↑"}
-                  {sortBy === "price-desc" && "Price ↓"}
-                  {sortBy === "calories-asc" && "Calories ↑"}
-                </span>
-              )}
-              <button
-                onClick={resetFilters}
-                className="ml-auto text-xs text-primary hover:text-primary/80 font-medium transition-colors"
-              >
-                Clear all
-              </button>
-            </div>
-          )}
+           </div>
         </div>
 
-        {/* Filter Tags Section */}
+        {/* Categories Panel (Classical Menu Style) */}
         {showFilters && (
-          <div className="px-4 md:px-6 pb-4 md:pb-6 border-t border-border/50 pt-4 bg-accent/5">
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-semibold text-foreground">
-                  Categories ({allTags.length})
-                </span>
-                {selectedTags.length > 0 && (
-                  <button
-                    onClick={() => setSelectedTags([])}
-                    className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    Clear tags
-                  </button>
-                )}
-              </div>
-              <div className="flex flex-wrap gap-2">
+          <div className="bg-[#F4EFE6] border-b-2 border-[#D4AF37] p-6 shadow-inner">
+             <div className="flex items-center justify-between mb-4">
+                <h3 className="font-playfair text-2xl italic text-[#2C241B]">Categories & Collections</h3>
+                <span className="font-cinzel text-xs text-[#8B7355] tracking-widest">{allTags.length} AVAILABLE</span>
+             </div>
+             <div className="flex flex-wrap gap-3">
                 {allTags.map((tag) => {
                   const isSelected = selectedTags.includes(tag)
                   return (
                     <button
                       key={tag}
                       onClick={() => toggleTag(tag)}
-                      className={`px-3 py-1.5 text-sm rounded-lg transition-all capitalize font-medium ${
+                      className={`px-6 py-2 border transition-all duration-300 font-old-standard text-lg capitalize ${
                         isSelected
-                          ? "bg-primary text-primary-foreground shadow-sm scale-105"
-                          : "bg-background border border-input text-muted-foreground hover:bg-accent hover:text-accent-foreground hover:border-accent"
+                          ? "bg-[#2C241B] text-[#D4AF37] border-[#2C241B] shadow-md transform -translate-y-0.5"
+                          : "bg-transparent text-[#5D4E3C] border-[#5D4E3C] hover:border-[#2C241B] hover:text-[#2C241B]"
                       }`}
                     >
                       {tag.replace("-", " ")}
                     </button>
                   )
                 })}
-              </div>
-            </div>
+             </div>
           </div>
         )}
       </div>
 
-      {/* Results Count */}
-      <div className="flex items-center justify-between text-sm text-muted-foreground px-1">
-        <span>
-          Showing <span className="font-semibold text-foreground">{filteredItems.length}</span> of{" "}
-          <span className="font-semibold text-foreground">{items.length}</span> items
-        </span>
-      </div>
+      {/* --- Results Section --- */}
+      <div className="px-4 md:px-8 max-w-[1600px] mx-auto">
+        <div className="flex items-center justify-center mb-10">
+           <div className="h-[1px] bg-[#D4AF37] w-24"></div>
+           <span className="mx-4 font-bodoni text-[#2C241B] text-xl tracking-widest">
+              SHOWING {filteredItems.length} OF {items.length}
+           </span>
+           <div className="h-[1px] bg-[#D4AF37] w-24"></div>
+        </div>
 
-      {/* Results Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
-        {filteredItems.length > 0 ? (
-          filteredItems.map((item) => (
-            <Link
-              key={item.slug}
-              href={`/${locale}/items/${item.slug}`}
-              className="group bg-card border border-border rounded-xl overflow-hidden hover:shadow-xl hover:shadow-primary/5 hover:border-primary/50 transition-all duration-300 flex flex-col"
-            >
-              {/* IMAGE CONTAINER MODIFIED: Removed aspect-square, removed fill */}
-              <div className="bg-muted relative overflow-hidden">
-                <Image
-                  src={item.image || "/placeholder.svg"}
-                  alt={item.name.en}
-                  // These props allow Next.js to optimize while respecting the CSS-defined aspect ratio
-                  width={0}
-                  height={0}
-                  sizes="100vw"
-                  className="w-full h-auto object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-              </div>
-              
-              <div className="p-5 flex flex-col flex-1">
-                <h2 className="text-lg font-bold mb-2 group-hover:text-primary transition-colors line-clamp-1">
-                  {locale === "en" ? item.name.en : item.name.bn}
-                </h2>
-                <p className="text-sm text-muted-foreground mb-4 line-clamp-2 flex-1 leading-relaxed">
-                  {locale === "en" ? item.description.en : item.description.bn}
-                </p>
-                <div className="flex justify-between items-center mb-3 pt-3 border-t border-border/50">
-                  <span className="text-2xl font-bold text-primary">₹{item.price}</span>
-                  <span className="text-xs font-semibold text-muted-foreground bg-accent px-2.5 py-1 rounded-md">
-                    {item.calories} cal
-                  </span>
-                </div>
-                <div className="flex flex-wrap gap-1.5">
-                  {item.tags.slice(0, 3).map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-2 py-0.5 bg-accent/30 text-accent-foreground text-[10px] font-medium uppercase tracking-wider rounded"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                  {item.tags.length > 3 && (
-                    <span className="px-2 py-0.5 bg-muted text-muted-foreground text-[10px] font-medium rounded">
-                      +{item.tags.length - 3}
-                    </span>
-                  )}
-                </div>
-              </div>
-            </Link>
-          ))
-        ) : (
-          <div className="col-span-full text-center py-20 px-4">
-            <div className="max-w-md mx-auto space-y-4">
-              <div className="w-16 h-16 mx-auto bg-muted rounded-full flex items-center justify-center">
-                <Search className="h-8 w-8 text-muted-foreground" />
-              </div>
-              <h3 className="text-xl font-semibold text-foreground">No items found</h3>
-              <p className="text-muted-foreground">
-                Try adjusting your filters or search terms to find what you're looking for.
-              </p>
-              <button
-                onClick={resetFilters}
-                className="px-6 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium"
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-12">
+          {filteredItems.length > 0 ? (
+            filteredItems.map((item) => (
+              <Link
+                key={item.slug}
+                href={`/${locale}/items/${item.slug}`}
+                className="group relative bg-white flex flex-col shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2"
               >
-                Clear all filters
-              </button>
+                {/* Classical Frame Border */}
+                <div className="absolute inset-2 border border-[#E5E0D8] pointer-events-none z-20 group-hover:border-[#D4AF37] transition-colors duration-500"></div>
+                
+                {/* Image Area */}
+                <div className="relative h-[300px] overflow-hidden bg-[#F4EFE6] m-2 mb-0">
+                  <Image
+                    src={item.image || "/placeholder.svg"}
+                    alt={item.name.en}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-110 filter sepia-[0.15] group-hover:sepia-0"
+                  />
+                  {/* Price Tag Overlay - Wax Seal Style */}
+                  <div className="absolute top-4 right-4 z-30">
+                     <div className="bg-[#2C241B] text-[#D4AF37] w-16 h-16 rounded-full flex items-center justify-center border-2 border-[#D4AF37] shadow-lg">
+                        <span className="font-prata text-lg font-bold">₹{item.price}</span>
+                     </div>
+                  </div>
+                </div>
+                
+                {/* Content Area */}
+                <div className="p-6 pt-8 text-center flex-1 flex flex-col bg-white relative z-10 m-2 mt-0 border-t-0">
+                  <h2 className="font-playfair text-2xl font-bold mb-3 text-[#2C241B] group-hover:text-[#8B4513] transition-colors leading-tight">
+                    {locale === "en" ? item.name.en : item.name.bn}
+                  </h2>
+                  
+                  {/* Decorative Divider */}
+                  <div className="flex justify-center mb-4">
+                     <span className="text-[#D4AF37] text-xs">♦ &nbsp; ♦ &nbsp; ♦</span>
+                  </div>
+
+                  <p className="font-cormorant text-xl text-[#5D4E3C] mb-6 line-clamp-3 leading-relaxed flex-1">
+                    {locale === "en" ? item.description.en : item.description.bn}
+                  </p>
+                  
+                  <div className="mt-auto space-y-4">
+                     {/* Tags */}
+                     <div className="flex flex-wrap justify-center gap-2">
+                        {item.tags.slice(0, 3).map((tag) => (
+                           <span key={tag} className="text-[10px] font-cinzel tracking-widest uppercase text-[#8B7355] border-b border-[#E5E0D8] pb-1">
+                              {tag}
+                           </span>
+                        ))}
+                     </div>
+                     
+                     {/* Footer Info */}
+                     <div className="flex justify-between items-center pt-4 border-t border-[#F4EFE6] font-old-standard text-[#8B7355]">
+                        <span className="flex items-center gap-1">
+                           <Star className="w-3 h-3 fill-[#D4AF37] text-[#D4AF37]" />
+                           <span className="text-sm">Artisan</span>
+                        </span>
+                        <span className="italic text-sm">{item.calories} kcal</span>
+                     </div>
+                  </div>
+                </div>
+              </Link>
+            ))
+          ) : (
+            <div className="col-span-full py-20 text-center bg-[#F4EFE6] m-4 border-double border-4 border-[#E5E0D8]">
+               <div className="max-w-md mx-auto space-y-6">
+                 <div className="text-6xl text-[#D4AF37] opacity-50 font-playfair italic">?</div>
+                 <h3 className="font-cinzel text-3xl text-[#2C241B]">No Masterpieces Found</h3>
+                 <p className="font-cormorant text-xl text-[#5D4E3C]">
+                   Your specific tastes are rare. Perhaps clear your filters to explore our full collection.
+                 </p>
+                 <button
+                    onClick={resetFilters}
+                    className="px-8 py-3 bg-[#2C241B] text-[#D4AF37] font-cinzel tracking-widest uppercase text-sm border border-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#2C241B] transition-all"
+                  >
+                    View All Collections
+                  </button>
+               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   )

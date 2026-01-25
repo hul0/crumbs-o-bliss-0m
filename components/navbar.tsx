@@ -92,6 +92,12 @@ export default function Navbar() {
             >
               {t("nav.profile")}
             </Link>
+            <Link
+              href={`/${currentLocale}/customization`}
+              className="text-sm font-medium text-foreground hover:text-primary transition-colors"
+            >
+              Custom
+            </Link>
           </div>
 
           {/* Right Side Controls */}
