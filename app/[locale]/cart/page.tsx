@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 import { useEffect, useState } from 'react'
 import type { Metadata } from 'next'
@@ -54,7 +54,7 @@ Please confirm this order!
     `.trim()
 
     // Open WhatsApp with the message
-    const phoneNumber = '911234567890'
+    const phoneNumber = '+919593035680'
     const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
 
     // Clear cart and redirect
