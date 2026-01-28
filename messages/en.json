@@ -1,57 +1,70 @@
 {
   "nav": {
-    "brand": "Crumbs O' Bliss",
     "home": "Home",
-    "items": "Items",
     "about": "About",
-    "terms": "Terms",
+    "items": "Items",
+    "customization": "Customization",
     "cart": "Cart",
+    "profile": "Profile",
     "contact": "Contact",
-    "profile": "Profile"
+    "terms": "Terms"
   },
+  "footer":{
+    "brand" : "Crumbs O' Bliss",
+    "rights" : "Copyright",
+    "description" : "Let's Bliss Together",
+    "links" : "Links"
+  }
+  ,
   "hero": {
-    "title": "Let's Bliss Together",
-    "subtitle": "Fresh, honest, small-batch baked goods made with time-tested techniques",
-    "cta": "Explore Our Collection"
+    "title": "Crumbs O' Bliss",
+    "subtitle": "Artisan Pizza & Cake Studio. Experience the magic of wood-fired pizzas and fresh organic baked goods.",
+    "cta": "Freshly Baked Daily"
   },
   "items": {
     "title": "Our Creations",
-    "description": "Handcrafted with care, each item is a testament to our passion for baking"
-  },
-  "item": {
-    "price": "Price",
-    "ingredients": "Ingredients",
-    "calories": "Calories per serving",
-    "buyNow": "Buy Now",
-    "addToCart": "Add to Cart"
+    "description": "Handcrafted with passion using 100% organic ingredients."
   },
   "about": {
-    "title": "About Crumbs O' Bliss",
-    "description": "Crumbs O' Bliss is an artisan bakery focused on fresh, honest, small-batch baked goods made with time-tested techniques and thoughtfully sourced ingredients. Baking is treated as both science and soul, balancing precision with warmth and care. Every item we create reflects our commitment to quality and our dedication to bringing joy through exceptional baked goods.",
-    "mission": "Our Mission",
-    "missionText": "To create exceptional baked goods that celebrate the art and craft of traditional baking while building a warm community around the love of fresh, quality food."
+    "title": "Our Story",
+    "description": "Small-batch artisan bakery dedicated to honest flavors and traditional methods."
   },
-  "terms": {
-    "title": "Terms and Conditions",
-    "lastUpdated": "Last updated",
-    "section1": "Use License",
-    "section1Text": "Permission is granted to temporarily download one copy of the materials on Crumbs O' Bliss website for personal, non-commercial transitory viewing only.",
-    "section2": "Disclaimer",
-    "section2Text": "The materials on our website are provided on an 'as is' basis. We make no warranties, expressed or implied, and hereby disclaim and negate all other warranties including, without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.",
-    "section3": "Limitations",
-    "section3Text": "In no event shall Crumbs O' Bliss or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on the Crumbs O' Bliss website."
-  },
-  "cart": {
-    "title": "Shopping Cart",
-    "empty": "Your cart is empty",
-    "continue": "Continue Shopping",
+  "Cart": {
+    "title": "Your Cart",
+    "empty": "Your cart is currently empty.",
+    "startShopping": "Start Shopping",
     "total": "Total",
-    "checkout": "Proceed to Checkout"
+    "checkout": "Checkout",
+    "remove": "Remove",
+    "quantity": "Qty",
+    "checkoutSuccess": "Order placed successfully!",
+    "price": "Price"
   },
-  "footer": {
-    "brand": "Crumbs O' Bliss",
-    "description": "Artisan bakery specializing in fresh, honest, small-batch baked goods",
-    "links": "Quick Links",
-    "rights": "All rights reserved"
+  "Items": {
+    "addToCart": "Add to Cart",
+    "added": "Added to Cart!",
+    "buyNow": "Buy Now",
+    "description": "Description",
+    "ingredients": "Ingredients",
+    "price": "Price",
+    "back": "Back to Items"
+  },
+  "Profile": {
+    "title": "My Profile",
+    "name": "Name",
+    "email": "Email",
+    "address": "Address",
+    "phone": "Phone Number",
+    "save": "Save Profile",
+    "saved": "Profile Saved!",
+    "alertTitle": "Profile Incomplete",
+    "alertMessage": "Please fill in your details to get the best experience and faster checkout.",
+    "placeholderName": "John Doe",
+    "placeholderEmail": "john@example.com",
+    "placeholderAddress": "123 Baker Street",
+    "placeholderPhone": "+880 1xxx xxx xxx"
+  },
+  "Common": {
+    "loading": "Loading..."
   }
 }
