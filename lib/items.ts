@@ -28,7 +28,7 @@ export const items: BakeryItem[] = [
     currency: "INR",
     ingredients: ["Flour", "Butter", "Eggs", "Sugar", "Vanilla"],
     calories: 365,
-    image: "/assets/products/cake 14.png", // Kept your local path
+    image: "/assets/products/cake 14.webp", // Kept your local path
     tags: ["cake", "sweet", "classic", "sponge"],
   },
 

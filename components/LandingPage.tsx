@@ -249,182 +249,47 @@ export function LandingPage({ locale, featuredItems, bakeryGalleryItems }: Landi
       </section>
 
       {/* --- FEATURED CATEGORIES --- */}
-      <section className="py-24 md:py-32 lg:py-40 px-4 md:px-6 lg:px-8 bg-background relative overflow-hidden">
-         <div className="absolute inset-0 gradient-mesh opacity-40"></div>
-
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 md:mb-24 gap-8 text-center md:text-left">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="max-w-2xl"
-            >
-              <span className="inline-block mb-5 px-5 py-2 glass-effect text-primary text-xs md:text-sm font-bold uppercase tracking-[0.2em] md:tracking-[0.25em] shadow-sm font-luxury">
-                Our Specialties
-              </span>
-              <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-5 text-foreground font-display">
-                Curated Delights
-              </h2>
-              <p className="text-xl md:text-2xl lg:text-3xl text-muted-foreground italic font-elegant leading-relaxed">
-                Explore our most loved categories.
-              </p>
-            </motion.div>
-            <div className="flex justify-center md:block">
-              <Link
-                href={`/${locale}/items`}
-                className="group flex items-center gap-4 text-primary font-bold text-base md:text-lg font-modern uppercase tracking-widest hover:text-primary/80 transition-colors"
-              >
-                View Full Menu
-                <span className="w-12 h-[2px] bg-current group-hover:w-20 transition-all duration-300" />
-                <ArrowRight className="w-5 h-5 group-hover:-rotate-45 transition-transform duration-300" />
-              </Link>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 lg:gap-12">
-            {featuredItems.map((item, idx) => (
-              <motion.div
-                key={item.slug}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true, margin: "-50px" }}
-                whileHover={{ y: -8 }}
-                transition={{ duration: 0.4, delay: idx * 0.1 }}
-              >
-                <Link
-                  href={`/${locale}/items/${item.slug}`}
-                  className="group block h-full glass-effect shadow-lg hover:shadow-2xl transition-all duration-300 relative overflow-hidden"
-                >
-                  <div className={`absolute -top-24 -right-24 w-48 h-48 rounded-full blur-3xl opacity-0 group-hover:opacity-30 transition-all duration-500 ${idx % 2 === 0 ? 'bg-primary' : 'bg-secondary'}`} />
-                  
-                  <div className="aspect-[4/5] relative overflow-hidden p-8 md:p-10 flex items-center justify-center">
-                    <div className="relative w-full h-full transform group-hover:scale-110 transition-transform duration-700">
-                      <Image
-                        src={item.image}
-                        alt={item.name.en}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 33vw"
-                        className="object-contain drop-shadow-2xl"
-                        loading="lazy"
-                      />
-                    </div>
-                    
-                    <div className="absolute top-6 right-6 glass-effect text-foreground font-bold px-5 py-2.5 font-modern text-sm shadow-sm z-10">
-                      ₹{item.price}
-                    </div>
-                  </div>
-
-                  <div className="p-8 md:p-10 relative">
-                    <h3 className="text-2xl md:text-3xl font-bold mb-3 text-foreground font-display group-hover:text-primary transition-colors">
-                      {locale === "en" ? item.name.en : item.name.bn}
-                    </h3>
-                    <p className="text-muted-foreground line-clamp-2 text-sm md:text-base mb-6 font-elegant leading-relaxed">
-                      {locale === "en" ? item.description.en : item.description.bn}
-                    </p>
-                    
-                    <div className="flex items-center justify-between pt-5 border-t border-border">
-                      <span className="text-xs font-bold text-muted-foreground uppercase tracking-[0.15em] flex items-center gap-2 font-modern">
-                        <Sparkles className="w-3.5 h-3.5 text-accent" />
-                        Top Pick
-                      </span>
-                      <div className="w-10 h-10 bg-primary/10 flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                         <ArrowRight className="w-5 h-5" />
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+     
 
       <CategoryShowcase />
 
-      {/* --- VIDEO GALLERY --- */}
-      <section className="py-20 md:py-32 lg:py-40 px-4 md:px-6 lg:px-8 bg-muted/30 backdrop-blur-sm shadow-inner overflow-hidden">
-        <div className="max-w-7xl mx-auto mb-12 md:mb-16 flex flex-col md:flex-row justify-between items-end gap-8 text-center md:text-left">
-          <div className="w-full md:w-auto">
-            <span className="inline-block px-5 py-2 mb-5 text-xs md:text-sm font-bold tracking-[0.2em] md:tracking-[0.3em] uppercase glass-effect text-primary shadow-sm font-luxury">
-              Behind the Scenes
-            </span>
-            <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground font-display leading-tight">
-              Crafting<br/>Perfection
-            </h2>
-          </div>
-          <p className="w-full md:max-w-md text-muted-foreground font-elegant italic text-xl md:text-2xl lg:text-3xl text-center md:text-left leading-relaxed">
-            "Experience the art of baking in every frame."
-          </p>
-        </div>
+     {/* --- VIDEO GALLERY --- */}
+<section className="py-20 md:py-32 lg:py-40 px-4 md:px-6 lg:px-8 bg-muted/30 backdrop-blur-sm shadow-inner overflow-hidden">
+  <div className="max-w-7xl mx-auto">
+    
+    {/* Optional: Keeping the header style if you want to label the video, 
+        otherwise, you can remove this inner div */}
+    <div className="mb-12 md:mb-16 flex flex-col md:flex-row justify-between items-end gap-8 text-center md:text-left">
+      <div className="w-full md:w-auto">
+        <span className="inline-block px-5 py-2 mb-5 text-xs md:text-sm font-bold tracking-[0.2em] md:tracking-[0.3em] uppercase glass-effect text-primary shadow-sm font-luxury">
+          Featured Content
+        </span>
+        <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground font-display leading-tight">
+          Watch the<br/>Experience
+        </h2>
+      </div>
+    </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 h-auto md:h-[600px] lg:h-[700px] max-w-7xl mx-auto">
-          {/* Main Video */}
-          <div className="md:col-span-8 h-[350px] md:h-full overflow-hidden shadow-2xl relative group">
-            <LazyVideo 
-              src="/assets/videos/cake-edit.mp4" 
-              poster="/assets/products/landing-card-1.png" 
-              className="w-full h-full"
-              label="Live Baking"
-            />
-            
-            <div className="absolute bottom-8 left-8 md:bottom-12 md:left-12 z-20 pointer-events-none">
-              <div className="flex items-center gap-2 mb-3">
-                 <span className="relative flex h-2.5 w-2.5 md:h-3 md:w-3">
-                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 md:h-3 md:w-3 bg-red-500"></span>
-                 </span>
-                 <span className="text-xs md:text-sm font-bold tracking-[0.15em] uppercase text-white/90 font-modern">Live</span>
-              </div>
-              <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold font-display text-white drop-shadow-lg">Let's Bliss Together</h3>
-            </div>
-          </div>
+    {/* Video Container with shadow and glass-effect borders */}
+    <div className="relative w-full overflow-hidden shadow-2xl rounded-xl border border-white/10 bg-black/5 aspect-video">
+      <iframe 
+        className="absolute top-0 left-0 w-full h-full"
+        src="https://www.youtube-nocookie.com/embed/hWVJucr3Il8?si=4NgmOal7-OBgtN3b" 
+        title="YouTube video player" 
+        frameBorder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+        referrerPolicy="strict-origin-when-cross-origin" 
+        allowFullScreen
+      ></iframe>
+    </div>
 
-          {/* Secondary Videos */}
-          <div className="md:col-span-4 flex flex-col gap-6 md:gap-8 h-full">
-            {[
-              { 
-                src: "https://assets.mixkit.co/videos/preview/mixkit-confectioner-decorating-a-chocolate-cake-41927-large.mp4", 
-                title: "Cake Artistry",
-                poster: "/assets/products/landing-card-2.png"
-              },
-              { 
-                src: "https://assets.mixkit.co/videos/preview/mixkit-melted-cheese-pizza-close-up-41923-large.mp4", 
-                title: "Melting Moments",
-                poster: "/assets/products/landing-card-3.png"
-              }
-            ].map((vid, idx) => (
-              <motion.div 
-                key={idx} 
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                className="relative flex-1 overflow-hidden shadow-lg group min-h-[200px]"
-              >
-                <LazyVideo 
-                  src={vid.src} 
-                  poster={vid.poster} 
-                  className="w-full h-full"
-                  label={vid.title}
-                />
-                <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 z-20 pointer-events-none">
-                  <h4 className="text-xl md:text-2xl font-bold font-display text-white drop-shadow-md">{vid.title}</h4>
-                </div>
-                <div className="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                  <div className="w-14 h-14 md:w-16 md:h-16 glass-effect flex items-center justify-center border border-white/30">
-                    <Play className="w-6 h-6 md:w-7 md:h-7 text-white fill-white" />
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+  </div>
+</section>
 
       {/* --- CIRCULAR GALLERY --- */}
       <div className="h-[400px] md:h-[550px] lg:h-[600px] relative bg-gradient-to-b from-transparent to-background/50 overflow-hidden">
         <Suspense fallback={<div className="w-full h-full flex items-center justify-center text-muted-foreground font-modern">Loading Gallery...</div>}>
-          <CircularGallery bend={2} items={bakeryGalleryItems} />
+          <CircularGallery bend={1} items={bakeryGalleryItems} />
         </Suspense>
       </div>
 

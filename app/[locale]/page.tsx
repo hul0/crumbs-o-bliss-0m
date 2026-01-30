@@ -101,11 +101,11 @@ export default async function HomePage({
   );
 
   const bakeryGalleryItems = [
-    { image: "/assets/products/landing-card-1.png", text: "Classic Sourdough" },
-    { image: "/assets/products/landing-card-2.png", text: "Chocolate Croissant" },
-    { image: "/assets/products/landing-card-3.png", text: "Blueberry Muffin" },
-    { image: "/assets/products/landing-card-4.png", text: "Cinnamon Roll" },
-    { image: "/assets/products/landing-card-5.png", text: "Almond Croissant" },
+    { image: "/assets/products/landing-card-1.webp", text: "Classic Sourdough" },
+    { image: "/assets/products/landing-card-2.webp", text: "Chocolate Croissant" },
+    { image: "/assets/products/landing-card-3.webp", text: "Blueberry Muffin" },
+    { image: "/assets/products/landing-card-4.webp", text: "Cinnamon Roll" },
+    { image: "/assets/products/landing-card-5.webp", text: "Almond Croissant" },
   ];
 
   return (
