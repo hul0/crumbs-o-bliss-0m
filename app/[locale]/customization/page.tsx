@@ -19,7 +19,7 @@ import {
   CheckCircle2,
   Lightbulb // Added for Lights option
 } from 'lucide-react';
-
+import details from '@/config/details.json'
 // --- Types ---
 type Category = 'cake' | 'pizza' | 'flower' | 'other' | null;
 
@@ -127,7 +127,7 @@ export default function CustomizationPage() {
     localStorage.setItem('bakery_user_info', JSON.stringify(userDetails));
 
     // 2. Construct WhatsApp Message
-    const phoneNumber = '919593035680'; 
+    const phoneNumber = details.contact.primaryPhone; 
     let detailsText = '';
 
     if (selectedCategory === 'cake') {

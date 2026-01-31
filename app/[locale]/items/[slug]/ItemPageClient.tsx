@@ -23,6 +23,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import type { items } from "@/lib/items";
 import { useCart } from "@/lib/cart-context";
 import CustomizationCTA from "@/components/tryCustom";
+import details from '@/config/details.json'
 
 interface ItemPageClientProps {
   item: (typeof items)[0] | undefined;
@@ -108,7 +109,7 @@ export default function ItemPageClient({ item, locale }: ItemPageClientProps) {
 
   // --- WhatsApp & Storage Logic ---
   const generateWhatsAppLink = (data: UserData) => {
-    const phoneNumber = "919593035680";
+    const phoneNumber = details.contact.primaryPhone;
     const message = `
 *New Order Request* 🍞
 

@@ -8,7 +8,7 @@ import { useTranslations } from "next-intl";
 import { Trash2, Plus, Minus, ShoppingBag } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
 import Loader from "@/components/loader";
-
+import details from '@/config/details.json'
 function CartPageContent({ locale }: { locale: string }) {
   const t = useTranslations();
   const { items, removeItem, updateQuantity, getTotal, clearCart } = useCart();
@@ -54,7 +54,7 @@ Please confirm this order!
     `.trim();
 
     // Open WhatsApp with the message
-    const phoneNumber = "+919593035680";
+    const phoneNumber = details.contact.primaryPhone;
     const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 
     // Clear cart and redirect
