@@ -18,6 +18,7 @@ import {
   Tag,
   ShoppingCart,
   Check,
+  Share2,
 } from "lucide-react";
 import {
   Playfair_Display,
@@ -90,6 +91,7 @@ export function ItemsGrid({ items, locale }) {
   const [viewMode, setViewMode] = useState("grid");
   const [addedItems, setAddedItems] = useState(new Set());
   const [selectedItem, setSelectedItem] = useState(null); // For Quick View Modal
+  const [shareMessage, setShareMessage] = useState("");
 
   // --- Derived Data ---
   const allTags = useMemo(() => {
@@ -175,6 +177,42 @@ export function ItemsGrid({ items, locale }) {
     setSortBy("default");
   };
 
+  const handleShare = async (e, item) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const shareUrl = `${window.location.origin}/${locale}/items/${item.slug}`;
+    const shareData = {
+      title: locale === "en" ? item.name.en : item.name.bn,
+      text: locale === "en" ? item.description.en : item.description.bn,
+      url: shareUrl,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        console.error("Error sharing:", err);
+      }
+    } else {
+      const textArea = document.createElement("textarea");
+      textArea.value = shareUrl;
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand("copy");
+        setShareMessage(
+          locale === "en"
+            ? "Link copied to clipboard!"
+            : "লিঙ্ক কপি করা হয়েছে!",
+        );
+        setTimeout(() => setShareMessage(""), 3000);
+      } catch (err) {
+        setShareMessage("Failed to copy link");
+      }
+      document.body.removeChild(textArea);
+    }
+  };
+
   const hasActiveFilters =
     searchQuery || selectedTags.length > 0 || sortBy !== "default";
 
@@ -219,6 +257,20 @@ export function ItemsGrid({ items, locale }) {
       min-h-screen bg-[var(--background)] text-[var(--text)] pb-24 font-sans transition-colors duration-500 selection:bg-[var(--primary)] selection:text-[var(--primary-foreground)]
     `}
     >
+      {/* Share Toast Notification */}
+      <AnimatePresence>
+        {shareMessage && (
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] bg-[var(--primary)] text-[var(--primary-foreground)] px-6 py-3 rounded-full shadow-2xl font-cinzel text-xs tracking-widest border border-white/20"
+          >
+            {shareMessage}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* --- Ambient Background Elements --- */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
         <motion.div
@@ -234,7 +286,12 @@ export function ItemsGrid({ items, locale }) {
             y: [0, 20, 0],
             opacity: [0.03, 0.05, 0.03],
           }}
-          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          transition={{
+            duration: 15,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 2,
+          }}
           className="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full bg-[var(--secondary)] blur-[100px]"
         />
       </div>
@@ -250,10 +307,7 @@ export function ItemsGrid({ items, locale }) {
           <div className="flex flex-col lg:flex-row gap-6 items-end lg:items-center justify-between">
             {/* Search */}
             <div className="w-full lg:w-1/3 relative group">
-              <motion.div
-                whileFocus={{ scale: 1.01 }}
-                className="relative"
-              >
+              <motion.div whileFocus={{ scale: 1.01 }} className="relative">
                 <input
                   type="text"
                   placeholder={
@@ -314,7 +368,11 @@ export function ItemsGrid({ items, locale }) {
                     <motion.div
                       layoutId="viewModeBg"
                       className="absolute inset-0 bg-[var(--primary)] rounded-full shadow-md"
-                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                      transition={{
+                        type: "spring",
+                        bounce: 0.2,
+                        duration: 0.6,
+                      }}
                     />
                   )}
                   <LayoutGrid className="h-4 w-4 relative z-10" />
@@ -332,7 +390,11 @@ export function ItemsGrid({ items, locale }) {
                     <motion.div
                       layoutId="viewModeBg"
                       className="absolute inset-0 bg-[var(--primary)] rounded-full shadow-md"
-                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                      transition={{
+                        type: "spring",
+                        bounce: 0.2,
+                        duration: 0.6,
+                      }}
                     />
                   )}
                   <ListIcon className="h-4 w-4 relative z-10" />
@@ -416,13 +478,13 @@ export function ItemsGrid({ items, locale }) {
             >
               <div className="max-w-[1920px] mx-auto p-4 md:px-6 md:pb-6">
                 <div className="flex items-center gap-3 mb-4">
-                    <div className="h-px bg-[var(--border)] flex-1"></div>
-                    <p className="text-[var(--muted-foreground)] font-cinzel text-[10px] tracking-[0.2em] uppercase">
+                  <div className="h-px bg-[var(--border)] flex-1"></div>
+                  <p className="text-[var(--muted-foreground)] font-cinzel text-[10px] tracking-[0.2em] uppercase">
                     Refine by Category
-                    </p>
-                    <div className="h-px bg-[var(--border)] flex-1"></div>
+                  </p>
+                  <div className="h-px bg-[var(--border)] flex-1"></div>
                 </div>
-                
+
                 <div className="flex flex-wrap gap-2 justify-center">
                   {allTags.map((tag, idx) => {
                     const isSelected = selectedTags.includes(tag);
@@ -468,7 +530,7 @@ export function ItemsGrid({ items, locale }) {
           animate="visible"
           className={
             viewMode === "grid"
-              ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8"
+              ? "grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-8"
               : "flex flex-col gap-6 max-w-5xl mx-auto"
           }
         >
@@ -500,7 +562,7 @@ export function ItemsGrid({ items, locale }) {
                           fill
                           className="object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
                         />
-                        
+
                         {/* Gradient Overlay */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
 
@@ -515,11 +577,21 @@ export function ItemsGrid({ items, locale }) {
                           >
                             <Eye className="w-5 h-5" />
                           </motion.button>
+
+                          <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            onClick={(e) => handleShare(e, item)}
+                            className="bg-[var(--background)] text-[var(--foreground)] p-3.5 rounded-full shadow-xl border border-[var(--border)] hover:bg-[var(--primary)] hover:text-[var(--primary-foreground)] hover:border-[var(--primary)] transition-colors"
+                            title="Share Delight"
+                          >
+                            <Share2 className="w-5 h-5" />
+                          </motion.button>
                         </div>
 
                         {/* Floating Top Right Action */}
                         <div className="absolute top-4 right-4 z-20">
-                           <motion.button
+                          <motion.button
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
                             onClick={(e) => handleAddToCart(e, item)}
@@ -552,14 +624,17 @@ export function ItemsGrid({ items, locale }) {
                             </AnimatePresence>
                           </motion.button>
                         </div>
-                        
+
                         {/* Tags floating on image */}
                         <div className="absolute top-4 left-4 flex flex-col gap-1.5 items-start">
-                             {item.tags.slice(0, 2).map(tag => (
-                                 <span key={tag} className="bg-[var(--background)]/90 backdrop-blur-sm text-[var(--foreground)] px-2 py-0.5 text-[10px] font-cinzel uppercase tracking-wider rounded-sm border border-[var(--border)] shadow-sm">
-                                     {tag}
-                                 </span>
-                             ))}
+                          {item.tags.slice(0, 2).map((tag) => (
+                            <span
+                              key={tag}
+                              className="bg-[var(--background)]/90 backdrop-blur-sm text-[var(--foreground)] px-2 py-0.5 text-[10px] font-cinzel uppercase tracking-wider rounded-sm border border-[var(--border)] shadow-sm"
+                            >
+                              {tag}
+                            </span>
+                          ))}
                         </div>
                       </div>
 
@@ -569,13 +644,20 @@ export function ItemsGrid({ items, locale }) {
                         <div className="w-12 h-0.5 bg-[var(--primary)] mb-4 opacity-50 group-hover:w-full transition-all duration-500 ease-out" />
 
                         <div className="flex justify-between items-start gap-4 mb-2">
-                          <Link href={`/${locale}/items/${item.slug}`} className="block group/title">
-                              <h3 className="font-playfair text-xl font-bold text-[var(--text)] leading-tight group-hover/title:text-[var(--primary)] transition-colors">
-                                {locale === "en" ? item.name.en : item.name.bn}
-                              </h3>
+                          <Link
+                            href={`/${locale}/items/${item.slug}`}
+                            className="block group/title"
+                          >
+                            <h3 className="font-playfair text-xl font-bold text-[var(--text)] leading-tight group-hover/title:text-[var(--primary)] transition-colors">
+                              {locale === "en" ? item.name.en : item.name.bn}
+                            </h3>
                           </Link>
                           <span className="font-prata font-bold text-[var(--highlight)] text-xl whitespace-nowrap">
-                            ₹{item.price}
+                            {item.price === 0
+                              ? locale === "en"
+                                ? "Contact for price"
+                                : "মূল্যের জন্য যোগাযোগ"
+                              : `₹${item.price}`}
                           </span>
                         </div>
 
@@ -616,14 +698,14 @@ export function ItemsGrid({ items, locale }) {
                         />
                         <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors" />
                       </div>
-                      
+
                       <div className="p-6 flex flex-col sm:flex-row flex-grow gap-6 justify-between items-center">
                         <div className="space-y-3 flex-grow w-full">
                           <div className="flex items-center gap-3">
                             <Link href={`/${locale}/items/${item.slug}`}>
-                                <h3 className="font-playfair text-2xl font-bold text-[var(--text)] group-hover:text-[var(--primary)] transition-colors">
+                              <h3 className="font-playfair text-2xl font-bold text-[var(--text)] group-hover:text-[var(--primary)] transition-colors">
                                 {locale === "en" ? item.name.en : item.name.bn}
-                                </h3>
+                              </h3>
                             </Link>
                           </div>
                           <p className="font-cormorant text-[var(--muted-foreground)] text-lg line-clamp-2 max-w-2xl leading-relaxed">
@@ -645,14 +727,18 @@ export function ItemsGrid({ items, locale }) {
 
                         <div className="flex sm:flex-col justify-between items-center sm:items-end gap-5 shrink-0 w-full sm:w-auto border-t sm:border-t-0 sm:border-l border-[var(--border)] pt-4 sm:pt-0 sm:pl-8 border-dashed">
                           <div className="text-right">
-                              <span className="block font-prata text-3xl text-[var(--highlight)] font-bold mb-1">
-                                ₹{item.price}
-                              </span>
-                              <span className="block text-[var(--muted-foreground)] font-cinzel text-xs flex items-center justify-end gap-1">
-                                  <Flame className="w-3 h-3"/> {item.calories} kcal
-                              </span>
+                            <span className="block font-prata text-3xl text-[var(--highlight)] font-bold mb-1">
+                              {item.price === 0
+                                ? locale === "en"
+                                  ? "Contact for price"
+                                  : "মূল্যের জন্য যোগাযোগ"
+                                : `₹${item.price}`}
+                            </span>
+                            <span className="block text-[var(--muted-foreground)] font-cinzel text-xs flex items-center justify-end gap-1">
+                              <Flame className="w-3 h-3" /> {item.calories} kcal
+                            </span>
                           </div>
-                          
+
                           <div className="flex gap-3">
                             <motion.button
                               whileHover={{ scale: 1.05 }}
@@ -667,15 +753,29 @@ export function ItemsGrid({ items, locale }) {
                             <motion.button
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
+                              onClick={(e) => handleShare(e, item)}
+                              className="p-2.5 border border-[var(--border)] rounded-full hover:bg-[var(--secondary)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors"
+                              title="Share"
+                            >
+                              <Share2 className="w-5 h-5" />
+                            </motion.button>
+
+                            <motion.button
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
                               onClick={(e) => handleAddToCart(e, item)}
                               className={`p-2.5 border rounded-full transition-all duration-300 ${
-                                addedItems.has(item.slug) 
-                                ? "text-[var(--primary-foreground)] bg-[var(--primary)] border-[var(--primary)] shadow-md" 
-                                : "border-[var(--border)] text-[var(--muted-foreground)] hover:border-[var(--primary)] hover:text-[var(--primary)]"
-                                }`}
+                                addedItems.has(item.slug)
+                                  ? "text-[var(--primary-foreground)] bg-[var(--primary)] border-[var(--primary)] shadow-md"
+                                  : "border-[var(--border)] text-[var(--muted-foreground)] hover:border-[var(--primary)] hover:text-[var(--primary)]"
+                              }`}
                               title="Add to Cart"
                             >
-                                {addedItems.has(item.slug) ? <Check className="w-5 h-5" /> : <ShoppingCart className="w-5 h-5" />}
+                              {addedItems.has(item.slug) ? (
+                                <Check className="w-5 h-5" />
+                              ) : (
+                                <ShoppingCart className="w-5 h-5" />
+                              )}
                             </motion.button>
                           </div>
                         </div>
@@ -685,7 +785,7 @@ export function ItemsGrid({ items, locale }) {
                 </motion.div>
               ))
             ) : (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 className="col-span-full py-24 text-center space-y-6 bg-[var(--card)]/30 rounded-3xl border border-dashed border-[var(--border)]"
@@ -694,12 +794,13 @@ export function ItemsGrid({ items, locale }) {
                   <ShoppingBag className="w-16 h-16 text-[var(--muted-foreground)] opacity-50" />
                 </div>
                 <div className="space-y-2">
-                    <h3 className="font-playfair text-4xl text-[var(--text)] italic">
+                  <h3 className="font-playfair text-4xl text-[var(--text)] italic">
                     No delicacies found
-                    </h3>
-                    <p className="font-cormorant text-2xl text-[var(--muted-foreground)] max-w-md mx-auto">
-                    Our bakers couldn't find a match. Try adjusting your filters.
-                    </p>
+                  </h3>
+                  <p className="font-cormorant text-2xl text-[var(--muted-foreground)] max-w-md mx-auto">
+                    Our bakers couldn't find a match. Try adjusting your
+                    filters.
+                  </p>
                 </div>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
@@ -741,20 +842,28 @@ export function ItemsGrid({ items, locale }) {
                   fill
                   className="object-cover"
                 />
-                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-60" />
-                <div className="absolute top-6 left-6 z-10">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-60" />
+                <div className="absolute top-6 left-6 z-10 flex gap-2">
                   <span className="bg-[var(--background)]/90 backdrop-blur text-[var(--foreground)] px-4 py-1.5 text-xs font-cinzel uppercase tracking-[0.2em] rounded-sm shadow-lg border border-[var(--border)]">
                     Quick View
                   </span>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={(e) => handleShare(e, selectedItem)}
+                    className="bg-[var(--background)]/90 backdrop-blur text-[var(--foreground)] p-1.5 rounded-sm shadow-lg border border-[var(--border)]"
+                  >
+                    <Share2 className="w-4 h-4" />
+                  </motion.button>
                 </div>
               </div>
 
               {/* Modal Content */}
               <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col overflow-y-auto bg-[var(--card)] relative">
-                 {/* Background watermark */}
-                 <div className="absolute top-0 right-0 p-10 opacity-[0.03] pointer-events-none">
-                    <Heart className="w-64 h-64 text-[var(--foreground)]" />
-                 </div>
+                {/* Background watermark */}
+                <div className="absolute top-0 right-0 p-10 opacity-[0.03] pointer-events-none">
+                  <Heart className="w-64 h-64 text-[var(--foreground)]" />
+                </div>
 
                 <div className="flex justify-between items-start mb-6 relative z-10">
                   <div className="space-y-3">
@@ -784,22 +893,34 @@ export function ItemsGrid({ items, locale }) {
                 </div>
 
                 <div className="space-y-6 mb-10 relative z-10">
-                    <div className="flex items-center gap-4 py-4 border-y border-[var(--border)] border-dashed">
-                         <div className="flex-1 text-center border-r border-[var(--border)] border-dashed">
-                             <span className="block text-[10px] font-cinzel text-[var(--muted-foreground)] uppercase tracking-widest mb-1">Price</span>
-                             <span className="font-prata text-3xl text-[var(--highlight)]">₹{selectedItem.price}</span>
-                         </div>
-                         <div className="flex-1 text-center">
-                             <span className="block text-[10px] font-cinzel text-[var(--muted-foreground)] uppercase tracking-widest mb-1">Energy</span>
-                             <span className="font-old-standard text-2xl text-[var(--text)]">{selectedItem.calories} kcal</span>
-                         </div>
+                  <div className="flex items-center gap-4 py-4 border-y border-[var(--border)] border-dashed">
+                    <div className="flex-1 text-center border-r border-[var(--border)] border-dashed">
+                      <span className="block text-[10px] font-cinzel text-[var(--muted-foreground)] uppercase tracking-widest mb-1">
+                        Price
+                      </span>
+                      <span className="font-prata text-3xl text-[var(--highlight)]">
+                        {selectedItem.price === 0
+                          ? locale === "en"
+                            ? "Contact for price"
+                            : "মূল্যের জন্য যোগাযোগ"
+                          : `₹${selectedItem.price}`}
+                      </span>
                     </div>
+                    <div className="flex-1 text-center">
+                      <span className="block text-[10px] font-cinzel text-[var(--muted-foreground)] uppercase tracking-widest mb-1">
+                        Energy
+                      </span>
+                      <span className="font-old-standard text-2xl text-[var(--text)]">
+                        {selectedItem.calories} kcal
+                      </span>
+                    </div>
+                  </div>
 
-                    <p className="font-cormorant text-xl text-[var(--muted-foreground)] leading-relaxed">
+                  <p className="font-cormorant text-xl text-[var(--muted-foreground)] leading-relaxed">
                     {locale === "en"
-                        ? selectedItem.description.en
-                        : selectedItem.description.bn}
-                    </p>
+                      ? selectedItem.description.en
+                      : selectedItem.description.bn}
+                  </p>
                 </div>
 
                 {/* Actions */}
@@ -815,29 +936,39 @@ export function ItemsGrid({ items, locale }) {
                     }`}
                   >
                     <AnimatePresence mode="wait">
-                        {addedItems.has(selectedItem.slug) ? (
-                            <motion.div key="added" initial={{y:10, opacity:0}} animate={{y:0, opacity:1}} className="flex items-center gap-2">
-                                <Check className="w-4 h-4" /> Added
-                            </motion.div>
-                        ) : (
-                            <motion.div key="add" initial={{y:-10, opacity:0}} animate={{y:0, opacity:1}} className="flex items-center gap-2">
-                                <ShoppingCart className="w-4 h-4" /> Add to Cart
-                            </motion.div>
-                        )}
+                      {addedItems.has(selectedItem.slug) ? (
+                        <motion.div
+                          key="added"
+                          initial={{ y: 10, opacity: 0 }}
+                          animate={{ y: 0, opacity: 1 }}
+                          className="flex items-center gap-2"
+                        >
+                          <Check className="w-4 h-4" /> Added
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          key="add"
+                          initial={{ y: -10, opacity: 0 }}
+                          animate={{ y: 0, opacity: 1 }}
+                          className="flex items-center gap-2"
+                        >
+                          <ShoppingCart className="w-4 h-4" /> Add to Cart
+                        </motion.div>
+                      )}
                     </AnimatePresence>
                   </motion.button>
-                  
+
                   <Link
                     href={`/${locale}/items/${selectedItem.slug}`}
                     className="flex-[1.5]"
                   >
-                      <motion.button 
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        className="w-full h-full rounded-[var(--radius)] bg-[var(--text)] text-[var(--background)] font-cinzel text-sm uppercase tracking-widest hover:bg-[var(--primary)] hover:text-[var(--primary-foreground)] transition-all shadow-xl"
-                      >
-                        View Full Details
-                      </motion.button>
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="w-full h-full rounded-[var(--radius)] bg-[var(--text)] text-[var(--background)] font-cinzel text-sm uppercase tracking-widest hover:bg-[var(--primary)] hover:text-[var(--primary-foreground)] transition-all shadow-xl"
+                    >
+                      View Full Details
+                    </motion.button>
                   </Link>
                 </div>
               </div>

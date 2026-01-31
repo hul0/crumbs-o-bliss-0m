@@ -16,6 +16,8 @@ import {
   Tag,
   MessageCircle,
   ChevronRight,
+  Share2,
+  Copy,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { items } from "@/lib/items";
@@ -47,6 +49,7 @@ export default function ItemPageClient({ item, locale }: ItemPageClientProps) {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [cartAdded, setCartAdded] = useState(false);
+  const [isShared, setIsShared] = useState(false);
 
   // Load user data on mount to pre-fill form if available
   useEffect(() => {
@@ -68,8 +71,42 @@ export default function ItemPageClient({ item, locale }: ItemPageClientProps) {
   const name = isEnglish ? item.name.en : item.name.bn;
   const description = isEnglish ? item.description.en : item.description.bn;
 
-  // --- WhatsApp & Storage Logic ---
+  // --- Share Logic ---
+  const handleShare = async () => {
+    const shareData = {
+      title: name,
+      text: `Check out this delicious ${name} from our bakery!`,
+      url: window.location.href,
+    };
 
+    // Check if Native Share is available (Mobile & Modern Desktop Browsers)
+    if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        if ((err as Error).name !== "AbortError") {
+          console.error("Error sharing:", err);
+        }
+      }
+    } else {
+      // Fallback: Copy Link for PC/Other browsers
+      try {
+        const textArea = document.createElement("textarea");
+        textArea.value = window.location.href;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+        
+        setIsShared(true);
+        setTimeout(() => setIsShared(false), 3000);
+      } catch (err) {
+        console.error("Could not copy text: ", err);
+      }
+    }
+  };
+
+  // --- WhatsApp & Storage Logic ---
   const generateWhatsAppLink = (data: UserData) => {
     const phoneNumber = "919593035680";
     const message = `
@@ -93,13 +130,7 @@ Pincode: ${data.pincode}
   };
 
   const handleBuyClick = () => {
-    // Check local storage for existing user info
-    const storedUser = localStorage.getItem("bakery_user_info");
-    if (storedUser) {
-      setShowModal(true); // Open modal anyway to confirm/edit details, but it will be pre-filled
-    } else {
-      setShowModal(true);
-    }
+    setShowModal(true);
   };
 
   const handleAddToCart = () => {
@@ -124,7 +155,7 @@ Pincode: ${data.pincode}
   return (
     <div className="min-h-screen bg-background text-foreground pb-20">
       {/* 1. Navigation Breadcrumb */}
-      <div className="container mx-auto px-4 py-6">
+      <div className="container mx-auto px-4 py-6 flex items-center justify-between">
         <Link
           href={`/${locale}/items`}
           className="inline-flex items-center text-muted-foreground hover:text-primary transition-colors text-sm font-medium group"
@@ -132,11 +163,20 @@ Pincode: ${data.pincode}
           <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
           Back to Menu
         </Link>
+        
+        {/* Secondary Share Button for Mobile Header */}
+        <button 
+          onClick={handleShare}
+          className="lg:hidden p-2 rounded-full bg-muted hover:bg-primary/10 text-muted-foreground hover:text-primary transition-colors"
+          aria-label="Share"
+        >
+          <Share2 className="w-5 h-5" />
+        </button>
       </div>
 
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-          {/* 2. Image Section with Entrance Animation */}
+          {/* 2. Image Section */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -159,9 +199,19 @@ Pincode: ${data.pincode}
             transition={{ duration: 0.5, delay: 0.2 }}
             className="flex flex-col h-full"
           >
-            <h1 className="text-4xl md:text-5xl font-serif font-bold text-primary mb-4 leading-tight">
-              {name}
-            </h1>
+            <div className="flex justify-between items-start gap-4 mb-4">
+              <h1 className="text-4xl md:text-5xl font-serif font-bold text-primary leading-tight">
+                {name}
+              </h1>
+              {/* Desktop Share Button */}
+              <button 
+                onClick={handleShare}
+                className="hidden lg:flex items-center gap-2 px-4 py-2 rounded-full border border-border text-sm font-medium hover:bg-muted transition-colors"
+              >
+                <Share2 className="w-4 h-4 text-primary" />
+                Share
+              </button>
+            </div>
 
             <div className="flex items-end gap-4 mb-6 border-b border-border pb-6">
               <p className="text-3xl font-bold text-foreground">
@@ -181,7 +231,6 @@ Pincode: ${data.pincode}
 
             {/* Info Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              {/* Ingredients */}
               <div className="bg-card p-4 rounded-xl border border-border">
                 <div className="flex items-center gap-2 mb-3 text-sm font-medium text-foreground">
                   <Leaf className="w-4 h-4 text-green-500" />
@@ -199,7 +248,6 @@ Pincode: ${data.pincode}
                 </div>
               </div>
 
-              {/* Tags */}
               <div className="bg-card p-4 rounded-xl border border-border">
                 <div className="flex items-center gap-2 mb-3 text-sm font-medium text-foreground">
                   <Tag className="w-4 h-4 text-blue-500" />
@@ -220,7 +268,6 @@ Pincode: ${data.pincode}
 
             {/* Actions Area */}
             <div className="mt-auto space-y-4 pt-4">
-              {/* Quantity Selector */}
               <div className="flex items-center gap-4 mb-4">
                 <span className="text-sm font-medium text-muted-foreground">
                   Quantity
@@ -244,41 +291,62 @@ Pincode: ${data.pincode}
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {/* Share Button (Action Row) */}
+                <motion.button
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleShare}
+                  className={`h-14 rounded-xl font-bold text-base flex items-center justify-center gap-2 transition-all border border-border ${
+                    isShared ? "bg-blue-50 text-blue-600 border-blue-200" : "bg-card text-foreground hover:bg-muted"
+                  }`}
+                >
+                  <AnimatePresence mode="wait">
+                    {isShared ? (
+                      <motion.div
+                        key="copied"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="flex items-center gap-2"
+                      >
+                        <Copy className="w-5 h-5" />
+                        <span>Link Copied!</span>
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key="share-btn"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="flex items-center gap-2"
+                      >
+                        <Share2 className="w-5 h-5 text-primary" />
+                        <span>Share</span>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.button>
+
                 <motion.button
                   whileTap={{ scale: 0.98 }}
                   onClick={handleAddToCart}
-                  className={`relative overflow-hidden h-14 rounded-xl font-bold text-base flex items-center justify-center gap-2 transition-all shadow-md ${
+                  className={`h-14 rounded-xl font-bold text-base flex items-center justify-center gap-2 transition-all shadow-md ${
                     cartAdded
                       ? "bg-green-600 text-white"
                       : "bg-card text-foreground border border-border hover:bg-accent hover:text-accent-foreground"
                   }`}
                 >
-                  <AnimatePresence mode="wait">
-                    {cartAdded ? (
-                      <motion.div
-                        key="check"
-                        initial={{ scale: 0.5, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        exit={{ scale: 0.5, opacity: 0 }}
-                        className="flex items-center gap-2"
-                      >
-                        <Check className="w-5 h-5" />
-                        <span>{t("itemDetails.cartAdded")}</span>
-                      </motion.div>
-                    ) : (
-                      <motion.div
-                        key="cart"
-                        initial={{ scale: 0.5, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        exit={{ scale: 0.5, opacity: 0 }}
-                        className="flex items-center gap-2"
-                      >
-                        <ShoppingCart className="w-5 h-5" />
-                        <span>{t("itemDetails.addToCart")}</span>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  {cartAdded ? (
+                    <div className="flex items-center gap-2">
+                      <Check className="w-5 h-5" />
+                      <span>{t("itemDetails.cartAdded")}</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <ShoppingCart className="w-5 h-5" />
+                      <span>{t("itemDetails.addToCart")}</span>
+                    </div>
+                  )}
                 </motion.button>
 
                 <motion.button
@@ -295,7 +363,7 @@ Pincode: ${data.pincode}
         </div>
       </div>
 
-      {/* 4. Modal with AnimatePresence */}
+      {/* 4. Modal */}
       <AnimatePresence>
         {showModal && (
           <motion.div
@@ -310,15 +378,11 @@ Pincode: ${data.pincode}
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
               className="bg-background rounded-2xl shadow-2xl w-full max-w-md overflow-hidden border border-border"
             >
-              {/* Modal Header */}
               <div className="flex items-center justify-between p-5 border-b border-border bg-card">
                 <div>
                   <h2 className="text-xl font-serif font-bold text-primary">
                     {t("modal.deliveryDetails")}
                   </h2>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Complete your details to place order via WhatsApp
-                  </p>
                 </div>
                 <button
                   onClick={() => setShowModal(false)}
@@ -328,7 +392,6 @@ Pincode: ${data.pincode}
                 </button>
               </div>
 
-              {/* Modal Form */}
               <form onSubmit={handleFormSubmit} className="p-6 space-y-5">
                 <div className="space-y-4">
                   <div className="space-y-2">
@@ -338,15 +401,11 @@ Pincode: ${data.pincode}
                     <input
                       required
                       type="text"
-                      placeholder="e.g. John Doe"
-                      className="w-full px-4 py-3 border border-input rounded-xl bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow"
+                      className="w-full px-4 py-3 border border-input rounded-xl bg-background"
                       value={formData.name}
-                      onChange={(e) =>
-                        setFormData({ ...formData, name: e.target.value })
-                      }
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     />
                   </div>
-
                   <div className="space-y-2">
                     <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                       {t("modal.mobileNumber")}
@@ -354,48 +413,36 @@ Pincode: ${data.pincode}
                     <input
                       required
                       type="tel"
-                      placeholder="10-digit number"
                       pattern="[0-9]{10}"
-                      className="w-full px-4 py-3 border border-input rounded-xl bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow"
+                      className="w-full px-4 py-3 border border-input rounded-xl bg-background"
                       value={formData.mobile}
-                      onChange={(e) =>
-                        setFormData({ ...formData, mobile: e.target.value })
-                      }
+                      onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
                     />
                   </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2 col-span-2">
-                      <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                        {t("modal.address")}
-                      </label>
-                      <textarea
-                        required
-                        rows={2}
-                        placeholder="House no, Street area..."
-                        className="w-full px-4 py-3 border border-input rounded-xl bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow resize-none"
-                        value={formData.address}
-                        onChange={(e) =>
-                          setFormData({ ...formData, address: e.target.value })
-                        }
-                      />
-                    </div>
-                    <div className="space-y-2 col-span-2">
-                      <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                        {t("modal.pincode")}
-                      </label>
-                      <input
-                        required
-                        type="text"
-                        placeholder="6-digit PIN"
-                        pattern="[0-9]{6}"
-                        className="w-full px-4 py-3 border border-input rounded-xl bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow"
-                        value={formData.pincode}
-                        onChange={(e) =>
-                          setFormData({ ...formData, pincode: e.target.value })
-                        }
-                      />
-                    </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      {t("modal.address")}
+                    </label>
+                    <textarea
+                      required
+                      rows={2}
+                      className="w-full px-4 py-3 border border-input rounded-xl bg-background resize-none"
+                      value={formData.address}
+                      onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      {t("modal.pincode")}
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      pattern="[0-9]{6}"
+                      className="w-full px-4 py-3 border border-input rounded-xl bg-background"
+                      value={formData.pincode}
+                      onChange={(e) => setFormData({ ...formData, pincode: e.target.value })}
+                    />
                   </div>
                 </div>
 
@@ -407,10 +454,7 @@ Pincode: ${data.pincode}
                     className="w-full py-4 bg-primary text-primary-foreground font-bold rounded-xl hover:opacity-90 transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/20"
                   >
                     {isSubmitting ? (
-                      <>
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                        <span>{t("modal.processing")}</span>
-                      </>
+                      <Loader2 className="w-5 h-5 animate-spin" />
                     ) : (
                       <>
                         <span>{t("modal.proceedWhatsApp")}</span>

@@ -40,17 +40,17 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(details.store.fullDomain),
   title: {
-    default: `${details.store.name} | Artisan Pizza & Cake Bakery`,
+    default: `${details.store.name} | Let's Bliss Together`,
     template: `%s | ${details.store.name}`,
   },
   description: `${details.store.name} - ${details.store.slogan}. Fresh artisanal pizzas and custom cakes in ${details.location.state}. Contact: ${details.contact.primaryPhone}`,
   keywords: details.seo.keywords,
-  authors: [{ name: `${details.store.name} Team` }],
-  creator: details.store.name,
+  authors: [{ name: `${details.store.name} Team & Hulo Biral` }],
+  creator: details.store.dev,
   publisher: details.store.name,
   icons: {
-    icon: "/icon.png",
-    apple: "/icon.png",
+    icon: "/logo-small.png",
+    apple: "/logo-small.png",
   },
   openGraph: {
     title: `${details.store.name} | Artisan Pizza & Cake Bakery`,
@@ -61,9 +61,9 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/opengraph-image.png",
-        width: 1200,
-        height: 630,
+        url: "/icon.png",
+        width: 600,
+        height: 600,
         alt: `${details.store.name} - ${details.store.slogan}`,
       },
     ],
