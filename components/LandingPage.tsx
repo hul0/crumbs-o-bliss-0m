@@ -163,8 +163,8 @@ export function LandingPage({ locale, featuredItems, bakeryGalleryItems }: Landi
           </motion.div>
 
           {/* Heading */}
-          <motion.div variants={fadeInUp} className="relative inline-block mb-6 md:mb-10 px-4">
-            <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black text-balance bg-clip-text text-transparent bg-primary via-primary/90 to-secondary tracking-tighter leading-[0.9] drop-shadow-sm font-display">
+          <motion.div variants={fadeInUp} className="relative inline-block mb-6 md:mb-10 px-4 py-4">
+            <h1 className="py-6 text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black text-balance bg-clip-text text-transparent bg-primary via-primary/90 to-secondary tracking-tighter leading-[0.9] drop-shadow-sm font-display">
               {t("hero.title")}
             </h1>
             <span className="absolute -top-4 -right-2 md:-top-8 md:-right-12 text-xl md:text-4xl text-primary/40 italic font-elegant rotate-12 hidden sm:block">
