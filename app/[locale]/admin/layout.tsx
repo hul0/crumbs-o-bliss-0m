@@ -54,13 +54,22 @@ export default async function AdminLayout({
               Dashboard
             </Link>
             {!isManager && (
-            <Link
-              href={`/${locale}/admin/products`}
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary hover:bg-muted"
-            >
-              <Package className="h-4 w-4" />
-              Products
-            </Link>
+            <>
+              <Link
+                href={`/${locale}/admin/products`}
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary hover:bg-muted"
+              >
+                <Package className="h-4 w-4" />
+                Products
+              </Link>
+              <Link
+                href={`/${locale}/admin/catalogues`}
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary hover:bg-muted"
+              >
+                <Package className="h-4 w-4" />
+                Catalogues
+              </Link>
+            </>
             )}
             <Link
               href={`/${locale}/admin/orders`}

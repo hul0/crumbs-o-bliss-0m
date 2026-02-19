@@ -108,25 +108,21 @@ create policy "Admins manage catalogue items" on catalogue_items for all using (
 -- Orders:
 -- Public can create orders (INSERT).
 create policy "Public can create orders" on orders for insert with check (true);
--- Users can view their order if they have the ticket_id (Handled via tracking page logic, but for RLS we need a strategy).
--- Strategy: We might use a secure function or just allow public read on orders specific columns if they know ticket_id? 
--- Better approach: "Admins and Managers can view all orders."
+-- Admins/Managers view all orders
 create policy "Admins/Managers view all orders" on orders for select using (
-  auth.uid() in (select id from profiles where role in ('admin', 'manager'))
+  exists (select 1 from profiles where id = auth.uid() and role in ('admin', 'manager'))
 );
 -- Admins can update orders.
 create policy "Admins can update orders" on orders for update using (
-  auth.uid() in (select id from profiles where role = 'admin')
+  exists (select 1 from profiles where id = auth.uid() and role = 'admin')
 );
--- Managers can only view (already covered) or maybe update status?
--- Requirement: "Manager -> can only generate e-bill". So read-only on orders table + maybe write logs.
 
 -- Order Items:
 -- Public can insert order items.
 create policy "Public can create order items" on order_items for insert with check (true);
 -- Admins/Managers can view.
 create policy "Admins/Managers view order items" on order_items for select using (
-  auth.uid() in (select id from profiles where role in ('admin', 'manager'))
+  exists (select 1 from profiles where id = auth.uid() and role in ('admin', 'manager'))
 );
 
 
@@ -137,6 +133,61 @@ begin
   insert into public.profiles (id, email, role)
   values (new.id, new.email, 'user');
   return new;
+end;
+$$ language plpgsql security definer;
+
+-- Function to get order details securely
+create or replace function public.get_order_details(p_ticket_id text, p_phone text)
+returns json as $$
+declare
+  v_order record;
+  v_items json;
+begin
+  -- Find the order matching both ticket_id and user_phone
+  select id, ticket_id, user_name, status, total_amount, created_at, delivery_address, admin_notes
+  into v_order
+  from public.orders
+  where ticket_id = p_ticket_id and user_phone = p_phone;
+
+  if not found then
+    return null;
+  end if;
+
+  -- Get all items for this order
+  select json_agg(json_build_object(
+    'id', id,
+    'product_name', product_name,
+    'quantity', quantity,
+    'price_at_time', price_at_time
+  ))
+  into v_items
+  from public.order_items
+  where order_id = v_order.id;
+
+  -- Return combined result
+  return json_build_object(
+    'order', json_build_object(
+      'id', v_order.id,
+      'ticket_id', v_order.ticket_id,
+      'user_name', v_order.user_name,
+      'status', v_order.status,
+      'total_amount', v_order.total_amount,
+      'created_at', v_order.created_at,
+      'delivery_address', v_order.delivery_address,
+      'admin_notes', v_order.admin_notes
+    ),
+    'items', coalesce(v_items, '[]'::json)
+  );
+end;
+$$ language plpgsql security definer;
+
+-- Function to safely increment product view count
+create or replace function public.increment_product_view(p_id uuid)
+returns void as $$
+begin
+  update public.products
+  set view_count = coalesce(view_count, 0) + 1
+  where id = p_id;
 end;
 $$ language plpgsql security definer;
 

@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { items } from "@/lib/items"
+import { createClient } from "@/utils/supabase/server"
 import { notFound } from "next/navigation"
 import ItemPageClient from "./ItemPageClient"
 
@@ -12,7 +12,15 @@ interface ItemPageProps {
 
 export async function generateMetadata({ params }: ItemPageProps): Promise<Metadata> {
   const { slug, locale } = await params
-  const item = items.find((i) => i.slug === slug)
+  const supabase = await createClient()
+
+  // For SEO, try to fetch by matching slug (we will use id as slug for Supabase objects if they don't have slugs)
+  // Let's assume the slug param here matches the product's ID for now, or you fall back
+  const { data: item } = await supabase
+    .from('products')
+    .select('*')
+    .eq('id', slug)
+    .single()
 
   if (!item) {
     return {
@@ -20,44 +28,63 @@ export async function generateMetadata({ params }: ItemPageProps): Promise<Metad
     }
   }
 
-  const name = locale === "en" ? item.name.en : item.name.bn
-  const description = locale === "en" ? item.description.en : item.description.bn
-
   return {
-    title: `${name} | Crumbs O' Bliss`,
-    description: description,
+    title: `${item.name} | Crumbs O' Bliss`,
+    description: item.description,
     openGraph: {
-      title: name,
-      description: description,
-      
+      title: item.name,
+      description: item.description,
       images: [
         {
-          url: item.image,
+          url: item.image_url || "",
           width: 400,
           height: 400,
-          alt: name,
+          alt: item.name,
         },
       ],
     },
   }
 }
 
-export async function generateStaticParams() {
-  return items.flatMap((item) => [
-    { slug: item.slug, locale: "en" },
-    { slug: item.slug, locale: "bn" },
-  ])
-}
-
 async function ItemPage({ params }: ItemPageProps) {
   const { slug, locale } = await params
-  const item = items.find((i) => i.slug === slug)
+  const supabase = await createClient()
 
-  if (!item) {
+  // The slug is actually the Product ID when coming from the Supabase mapping logic
+  const { data: item, error } = await supabase
+    .from('products')
+    .select('*')
+    .eq('id', slug)
+    .single()
+
+  if (error || !item) {
     notFound()
   }
+  
+  // Increment view_count asynchronously 
+  // We can just increment it using a direct RPC if concurrency matters, or simple update:
+  supabase.rpc('increment_product_view', { p_id: item.id }).then(({error})=> {
+    if(error){
+      // Fallback if RPC doesn't exist yet
+      supabase.from('products').update({ view_count: (item.view_count || 0) + 1 }).eq('id', item.id).then();
+    }
+  });
 
-  return <ItemPageClient item={item} locale={locale} />
+  // Map to the shape expected by ItemPageClient
+  const mappedItem = {
+    id: item.id,
+    slug: item.id,
+    name: { en: item.name, bn: item.name },
+    description: { en: item.description, bn: item.description },
+    image: item.image_url || "/assets/placeholder.jpg",
+    price: item.price,
+    currency: "INR" as const,
+    weight: 100, // Default or fetch from DB if added later
+    tags: item.category ? [item.category] : [],
+    ingredients: [],
+  }
+
+  return <ItemPageClient item={mappedItem} locale={locale} />
 }
 
 export default ItemPage

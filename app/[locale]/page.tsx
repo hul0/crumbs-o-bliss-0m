@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import { items } from "@/lib/items";
+// import { items } from "@/lib/items";
+import { createClient } from "@/utils/supabase/server";
 import details from "@/config/details.json";
 import { LandingPage } from "@/components/LandingPage";
 
@@ -101,10 +102,26 @@ export default async function HomePage({
 }) {
   const { locale } = await params;
 
+  const supabase = await createClient();
+  const { data: products } = await supabase
+    .from('products')
+    .select('*')
+    .eq('is_active', true)
+    .limit(4);
+
   // Prepare data for the client component
-  const featuredItems = items.filter((item) =>
-    ["Cake", "Cake", "Cake"].includes(item.slug),
-  );
+  // Map Supabase product to the expected format (BakeryItem interface match)
+  const featuredItems = products?.map((p: any) => ({
+      id: p.id,
+      slug: p.id, // using id as slug for now or we need a slug field in DB
+      name: { en: p.name, bn: p.name }, // naive localization if DB doesn't support it yet
+      description: { en: p.description || '', bn: p.description || '' },
+      price: p.price,
+      currency: "INR",
+      image: p.image_url || "/assets/products/landing-card-1.webp",
+      tags: [p.category || 'general']
+  })) || [];
+
   const bakeryGalleryItems = [
     { image: "/assets/products/landing-card-1.webp", text: "Cake" },
     { image: "/assets/products/landing-card-2.webp", text: "Cake" },

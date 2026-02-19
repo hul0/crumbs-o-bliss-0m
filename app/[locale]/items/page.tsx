@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
-import { items } from '@/lib/items'
+import { createClient } from '@/utils/supabase/server'
 import details from '@/config/details.json'
 import { ItemsGrid } from '@/components/items-grid'
 
@@ -11,27 +11,35 @@ export const metadata: Metadata = {
 
 async function ItemsPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
-  const t = await getTranslations()
+  const supabase = await createClient()
 
   // Default to English if locale is missing or invalid
   const currentLocale = locale === 'bn' ? 'bn' : 'en'
 
+  // Fetch all active products
+  const { data: products } = await supabase
+    .from('products')
+    .select('*')
+    .eq('is_active', true)
+    
+  // Map Supabase products to the format expected by ItemsGrid (BakeryItem)
+  const mappedItems = (products || []).map(p => ({
+      id: p.id,
+      slug: p.id,
+      name: { en: p.name, bn: p.name },
+      description: { en: p.description, bn: p.description },
+      image: p.image_url || '/assets/placeholder.jpg',
+      price: p.price,
+      weight: 100, // Hardcoded for now unless added to schema
+      tags: p.category ? [p.category] : [],
+      currency: "INR" as const,
+      ingredients: []
+  }))
+
   return (
     <div className="min-h-screen py-12 px-4 bg-background">
       <div className="max-w-6xl mx-auto">
-        {/* <div className="mb-12 text-center md:text-left">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-primary">
-            {t('items.title')}
-          </h1>
-          <p className="text-lg text-muted-foreground text-balance max-w-2xl">
-            {t('items.description')}
-          </p>
-        </div> */}
-
-        {/* We pass the raw items to the Client Component.
-          The Client Component handles the search, sort, and filtering logic.
-        */}
-        <ItemsGrid items={items} locale={currentLocale} />
+        <ItemsGrid items={mappedItems} locale={currentLocale} />
       </div>
     </div>
   )

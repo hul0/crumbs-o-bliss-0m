@@ -5,62 +5,82 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { Trash2, Plus, Minus, ShoppingBag } from "lucide-react";
+import { Trash2, Plus, Minus, ShoppingBag, Loader2 } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
 import Loader from "@/components/loader";
 import details from '@/config/details.json'
+import { createClient } from "@/utils/supabase/client";
+import { useRouter } from "next/navigation";
 function CartPageContent({ locale }: { locale: string }) {
   const t = useTranslations();
   const { items, removeItem, updateQuantity, getTotal, clearCart } = useCart();
   const [mounted, setMounted] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
+  const supabase = createClient();
 
   useEffect(() => {
     setMounted(true);
-    // Simulate loading
     setTimeout(() => setIsLoading(false), 600);
   }, []);
 
-  const handleCheckout = () => {
-    if (items.length === 0) return;
+  const handleCheckoutSubmit = async (userDetails: { name: string; phone: string; address: string }) => {
+    setIsSubmitting(true);
+    
+    try {
+      const subtotal = getTotal();
+      const shippingCost = subtotal > 500 ? 0 : 50;
+      const totalAmount = subtotal + shippingCost;
+      
+      const orderId = typeof crypto !== 'undefined' && crypto.randomUUID 
+          ? crypto.randomUUID() 
+          : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+              const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+              return v.toString(16);
+            });
 
-    setIsCheckingOut(true);
+      const ticketId = `ORD-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
 
-    // Generate WhatsApp message with cart details
-    const orderDetails = items
-      .map(
-        (cartItem) =>
-          `${locale === "bn" ? cartItem.item.name.bn : cartItem.item.name.en} - ₹${cartItem.item.price} × ${cartItem.quantity} = ₹${cartItem.item.price * cartItem.quantity}`,
-      )
-      .join("\n");
+      const { error: orderError } = await supabase
+        .from('orders')
+        .insert({
+          id: orderId,
+          ticket_id: ticketId,
+          user_name: userDetails.name,
+          user_phone: userDetails.phone,
+          delivery_address: userDetails.address,
+          total_amount: totalAmount,
+          status: 'pending'
+        });
 
-    const subtotal = getTotal();
-    const shippingCost = subtotal > 500 ? 0 : 50;
-    const total = subtotal + shippingCost;
+      if (orderError) throw orderError;
 
-    const message = `
-*New Cart Order* 🛒
+      const orderItemsToInsert = items.map(cartItem => ({
+        order_id: orderId,
+        product_id: typeof cartItem.item.id === 'string' ? cartItem.item.id : null, 
+        product_name: locale === 'bn' ? cartItem.item.name.bn : cartItem.item.name.en,
+        quantity: cartItem.quantity,
+        price_at_time: cartItem.item.price
+      }));
 
-*Order Details:*
-${orderDetails}
+      const { error: itemsError } = await supabase
+        .from('order_items')
+        .insert(orderItemsToInsert);
 
-*Order Summary:*
-Subtotal: ₹${subtotal.toFixed(2)}
-Shipping: ${shippingCost === 0 ? "Free" : `₹${shippingCost}`}
-Total: ₹${total.toFixed(2)}
+      if (itemsError) throw itemsError;
 
-Please confirm this order!
-    `.trim();
-
-    // Open WhatsApp with the message
-    const phoneNumber = details.contact.primaryPhone;
-    const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-
-    // Clear cart and redirect
-    clearCart();
-    window.open(whatsappLink, "_blank");
-    setIsCheckingOut(false);
+      clearCart();
+      setIsCheckoutModalOpen(false);
+      router.push(`/${locale}/track/${ticketId}`);
+      
+    } catch (error) {
+      console.error("Checkout failed:", error);
+      alert("Failed to place order. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (!mounted) return null;
@@ -212,11 +232,11 @@ Please confirm this order!
                 </div>
 
                 <button
-                  onClick={handleCheckout}
-                  disabled={isCheckingOut || items.length === 0}
+                  onClick={() => setIsCheckoutModalOpen(true)}
+                  disabled={items.length === 0}
                   className="w-full px-6 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isCheckingOut ? "Processing..." : t("cart.checkout")}
+                  {t("cart.checkout")}
                 </button>
 
                 <Link
@@ -230,6 +250,72 @@ Please confirm this order!
           </div>
         )}
       </div>
+      
+      {isCheckoutModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-card w-full max-w-md rounded-lg p-6 shadow-xl">
+            <h2 className="mb-4 text-xl font-bold">Checkout Details</h2>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const formData = new FormData(e.currentTarget);
+                handleCheckoutSubmit({
+                  name: formData.get('name') as string,
+                  phone: formData.get('phone') as string,
+                  address: formData.get('address') as string,
+                });
+              }}
+              className="space-y-4"
+            >
+              <div>
+                <label className="mb-1 block text-sm font-medium">Full Name</label>
+                <input
+                  required
+                  name="name"
+                  type="text"
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium">WhatsApp Number (For Tracking)</label>
+                <input
+                  required
+                  name="phone"
+                  type="tel"
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium">Delivery Address</label>
+                <textarea
+                  required
+                  name="address"
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  rows={3}
+                />
+              </div>
+              <div className="mt-6 flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsCheckoutModalOpen(false)}
+                  disabled={isSubmitting}
+                  className="rounded-md px-4 py-2 text-sm font-medium hover:bg-muted"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
+                >
+                  {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  Confirm Order
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
