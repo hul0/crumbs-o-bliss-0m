@@ -12,6 +12,7 @@ import Footer from "@/components/footer"
 import ThemeProvider from "@/components/theme-provider"
 import { CartProvider } from "@/lib/cart-context"
 import details from "@/config/details.json"
+import PublicLayoutWrapper from "@/components/public-layout-wrapper"
 
 // Optimize fonts: Use 'swap' to ensure text is visible during font load
 // and define variables for CSS usage
@@ -114,11 +115,7 @@ export default async function LocaleLayout({
         <ThemeProvider>
           <NextIntlClientProvider messages={messages}>
             <CartProvider>
-              <div className="flex flex-col min-h-screen">
-                <Navbar />
-                <main className="flex-1">{children}</main>
-                <Footer />
-              </div>
+                <PublicLayoutWrapper>{children}</PublicLayoutWrapper>
             </CartProvider>
           </NextIntlClientProvider>
         </ThemeProvider>
