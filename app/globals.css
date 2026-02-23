@@ -302,3 +302,9 @@
 .animate-shimmer {
   animation: shimmer 1.5s infinite;
 }
+
+/* 6. Sinusoidal Wave Spinner */
+@keyframes wave {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}

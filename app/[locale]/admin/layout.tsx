@@ -2,7 +2,9 @@
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { LayoutDashboard, ShoppingBag, Package, LogOut } from 'lucide-react'
+import { LayoutDashboard, ShoppingBag, Package, LogOut, Menu } from 'lucide-react'
+import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from '@/components/ui/sheet'
+import { Button } from '@/components/ui/button'
 
 export default async function AdminLayout({
   children,
@@ -37,7 +39,8 @@ export default async function AdminLayout({
   const isManager = profile.role === 'manager'
 
   return (
-    <div className="flex min-h-screen w-full bg-muted/40">
+    <div className="flex min-h-screen w-full bg-muted/40 text-foreground">
+      {/* Desktop Sidebar */}
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-64 flex-col border-r bg-background sm:flex">
         <div className="flex h-14 items-center gap-2 border-b px-4 lg:h-[60px] lg:px-6">
           <Link href={`/${locale}/admin`} className="flex items-center gap-2 font-semibold">
@@ -89,14 +92,72 @@ export default async function AdminLayout({
             </form>
         </div>
       </aside>
-      <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-64">
+
+      {/* Main Content Area */}
+      <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-64 w-full min-w-0">
         <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
-            {/* Mobile Menu trigger could go here */}
+            
+            {/* Mobile Navigation Sheet */}
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button size="icon" variant="outline" className="sm:hidden">
+                  <Menu className="h-5 w-5" />
+                  <span className="sr-only">Toggle Menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="sm:max-w-xs flex flex-col">
+                <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+                <SheetDescription className="sr-only">Navigation routes for the admin interface</SheetDescription>
+                <nav className="grid gap-4 text-lg font-medium mt-6 flex-1">
+                  <Link
+                    href={`/${locale}/admin`}
+                    className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                  >
+                    <LayoutDashboard className="h-5 w-5" />
+                    Dashboard
+                  </Link>
+                  {!isManager && (
+                  <>
+                    <Link
+                      href={`/${locale}/admin/products`}
+                      className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                    >
+                      <Package className="h-5 w-5" />
+                      Products
+                    </Link>
+                    <Link
+                      href={`/${locale}/admin/catalogues`}
+                      className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                    >
+                      <Package className="h-5 w-5" />
+                      Catalogues
+                    </Link>
+                  </>
+                  )}
+                  <Link
+                    href={`/${locale}/admin/orders`}
+                    className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                  >
+                    <ShoppingBag className="h-5 w-5" />
+                    Orders
+                  </Link>
+                </nav>
+                <div className="mt-auto pt-4 border-t">
+                  <form action="/auth/signout" method="post">
+                      <button className="flex items-center gap-4 px-2.5 text-lg font-medium text-muted-foreground hover:text-foreground w-full text-left">
+                          <LogOut className="h-5 w-5" />
+                          Sign Out
+                      </button>
+                  </form>
+                </div>
+              </SheetContent>
+            </Sheet>
+
             <div className="ml-auto">
-                <span className="text-sm text-muted-foreground">Logged in as {profile.role}</span>
+                <span className="text-sm text-muted-foreground capitalize">Logged in as {profile.role}</span>
             </div>
         </header>
-        <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+        <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 w-full max-w-full overflow-hidden">
           {children}
         </main>
       </div>

@@ -122,39 +122,39 @@ export default async function DashboardPage() {
       .slice(0, 5);
 
   return (
-    <div className="flex flex-col gap-8 w-full pb-12 animate-in fade-in duration-700">
+    <div className="flex flex-col gap-4 sm:gap-8 w-full pb-12 animate-in fade-in duration-700">
       {/* Header Section */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border border-primary/10 p-8 sm:p-10 mb-2">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border border-primary/10 p-6 sm:p-10 mb-2">
         <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6">
           <div className="space-y-2">
-            <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-foreground font-display">
+            <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-foreground font-display">
               Dashboard Overview
             </h1>
-            <p className="text-muted-foreground text-lg italic font-elegant">
+            <p className="text-muted-foreground text-base sm:text-lg italic font-elegant">
               Welcome back. Here is your bakery's performance at a glance.
             </p>
           </div>
-          <div className="bg-background/50 p-1 rounded-xl backdrop-blur-sm shadow-sm">
+          <div className="bg-background/50 p-1 rounded-xl backdrop-blur-sm shadow-sm self-start sm:self-auto">
             <ExportCsvButton />
           </div>
         </div>
       </div>
       
       {/* Primary Metrics */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 animate-in slide-in-from-bottom-8 duration-700 delay-100 fill-mode-both">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 animate-in slide-in-from-bottom-8 duration-700 delay-100 fill-mode-both">
         {/* Card 1: Revenue Today */}
         <Card className="relative overflow-hidden border-0 shadow-lg group hover:-translate-y-1 transition-transform duration-300">
           <div className="absolute inset-0 bg-gradient-to-br from-green-400 to-emerald-600 opacity-90 group-hover:opacity-100 transition-opacity" />
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20 mix-blend-overlay" />
           <CardHeader className="relative z-10 flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-bold text-white uppercase tracking-wider">Revenue (Today)</CardTitle>
+            <CardTitle className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider">Revenue (Today)</CardTitle>
             <div className="p-2 bg-white/20 rounded-full backdrop-blur-md">
-               <DollarSign className="h-5 w-5 text-white" />
+               <DollarSign className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
             </div>
           </CardHeader>
           <CardContent className="relative z-10">
-            <div className="text-4xl font-black text-white drop-shadow-sm">₹{revenueToday.toLocaleString()}</div>
+            <div className="text-3xl sm:text-4xl font-black text-white drop-shadow-sm">₹{revenueToday.toLocaleString()}</div>
             <p className="text-xs text-white/80 mt-2 font-medium">Since midnight</p>
           </CardContent>
         </Card>
@@ -164,13 +164,13 @@ export default async function DashboardPage() {
           <div className="absolute inset-0 bg-gradient-to-br from-primary to-orange-500 opacity-90 group-hover:opacity-100 transition-opacity" />
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20 mix-blend-overlay" />
           <CardHeader className="relative z-10 flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-bold text-white uppercase tracking-wider">Revenue (Month)</CardTitle>
+            <CardTitle className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider">Revenue (Month)</CardTitle>
             <div className="p-2 bg-white/20 rounded-full backdrop-blur-md">
-               <Activity className="h-5 w-5 text-white" />
+               <Activity className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
             </div>
           </CardHeader>
           <CardContent className="relative z-10">
-            <div className="text-4xl font-black text-white drop-shadow-sm">₹{revenueMonth.toLocaleString()}</div>
+            <div className="text-3xl sm:text-4xl font-black text-white drop-shadow-sm">₹{revenueMonth.toLocaleString()}</div>
             <p className="text-xs text-white/80 mt-2 font-medium">Current month total</p>
           </CardContent>
         </Card>
@@ -179,13 +179,13 @@ export default async function DashboardPage() {
         <Card className="relative overflow-hidden border bg-card shadow-sm hover:shadow-md transition-shadow group">
           <div className="absolute right-0 top-0 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl group-hover:bg-purple-500/20 transition-colors" />
           <CardHeader className="relative z-10 flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Total Orders</CardTitle>
+            <CardTitle className="text-xs sm:text-sm font-bold text-muted-foreground uppercase tracking-wider">Total Orders</CardTitle>
             <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-full">
-               <CreditCard className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+               <CreditCard className="h-4 w-4 sm:h-5 sm:w-5 text-purple-600 dark:text-purple-400" />
             </div>
           </CardHeader>
           <CardContent className="relative z-10">
-            <div className="text-4xl font-black text-foreground">{allOrders?.length || 0}</div>
+            <div className="text-3xl sm:text-4xl font-black text-foreground">{allOrders?.length || 0}</div>
             <p className="text-xs text-muted-foreground mt-2 font-medium">Across entire history</p>
           </CardContent>
         </Card>
@@ -194,25 +194,25 @@ export default async function DashboardPage() {
         <Card className="relative overflow-hidden border bg-card shadow-sm hover:shadow-md transition-shadow group">
           <div className="absolute left-0 bottom-0 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-colors" />
           <CardHeader className="relative z-10 flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Total Site Views</CardTitle>
+            <CardTitle className="text-xs sm:text-sm font-bold text-muted-foreground uppercase tracking-wider">Total Site Views</CardTitle>
             <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-full">
-               <Eye className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+               <Eye className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600 dark:text-blue-400" />
             </div>
           </CardHeader>
           <CardContent className="relative z-10">
-             <div className="text-4xl font-black text-foreground">{totalPageViews > 0 ? totalPageViews.toLocaleString() : '---'}</div>
+             <div className="text-3xl sm:text-4xl font-black text-foreground">{totalPageViews > 0 ? totalPageViews.toLocaleString() : '---'}</div>
              <p className="text-xs text-muted-foreground mt-2 font-medium">Powered by CounterAPI</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Interactive Charts Component */}
-      <div className="animate-in slide-in-from-bottom-8 duration-700 delay-200 fill-mode-both">
+      <div className="animate-in slide-in-from-bottom-8 duration-700 delay-200 fill-mode-both w-full overflow-hidden">
         <DashboardCharts revenueByDay={revenueChartData} ordersByStatus={statusChartData} />
       </div>
 
       {/* Lists Row */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         <Card className="col-span-1 shadow-sm">
           <CardHeader>
             <CardTitle>Recent Orders</CardTitle>
@@ -249,12 +249,12 @@ export default async function DashboardPage() {
                 {topSelling.map((item: {name: string, count: number}, i: number) => (
                     <div key={i} className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                           <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold text-primary">
+                           <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold text-primary">
                              {i + 1}
                            </div>
-                           <p className="text-sm font-medium leading-none truncate max-w-[150px]">{item.name}</p>
+                           <p className="text-sm font-medium leading-none line-clamp-1">{item.name}</p>
                         </div>
-                        <div className="font-medium bg-muted/50 px-2 py-1 rounded text-xs">{item.count} units</div>
+                        <div className="font-medium bg-muted/50 px-2 py-1 rounded text-xs whitespace-nowrap ml-2">{item.count} units</div>
                     </div>
                 ))}
                 
@@ -275,12 +275,12 @@ export default async function DashboardPage() {
                 {topViewed?.map((item: any, i: number) => (
                     <div key={item.id} className="flex items-center justify-between">
                          <div className="flex items-center gap-3">
-                           <div className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30 text-[10px] font-bold text-blue-600 dark:text-blue-400">
+                           <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30 text-[10px] font-bold text-blue-600 dark:text-blue-400">
                              {i + 1}
                            </div>
-                           <p className="text-sm font-medium leading-none truncate max-w-[150px]">{item.name}</p>
+                           <p className="text-sm font-medium leading-none line-clamp-1">{item.name}</p>
                         </div>
-                        <div className="font-medium bg-muted/50 px-2 py-1 rounded text-xs">{item.view_count || 0} views</div>
+                        <div className="font-medium bg-muted/50 px-2 py-1 rounded text-xs whitespace-nowrap ml-2">{item.view_count || 0} views</div>
                     </div>
                 ))}
                 

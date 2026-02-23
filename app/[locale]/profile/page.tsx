@@ -15,7 +15,9 @@ import {
   Loader2,
   Sparkles,
   CreditCard,
-  ShieldCheck
+  ShieldCheck,
+  ShoppingBag,
+  ChevronRight
 } from 'lucide-react'
 import Loader from '@/components/loader'
 
@@ -44,6 +46,7 @@ export default function ProfilePage({ params }: ProfilePageProps) {
   const [isSaving, setIsSaving] = useState(false)
   const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [hasData, setHasData] = useState(false)
+  const [orderHistory, setOrderHistory] = useState<any[]>([])
 
   // Load params and data
   useEffect(() => {
@@ -61,6 +64,16 @@ export default function ProfilePage({ params }: ProfilePageProps) {
           console.error('Failed to parse user data')
         }
       }
+
+      const storedHistory = localStorage.getItem('bakery_order_history')
+      if (storedHistory) {
+        try {
+          setOrderHistory(JSON.parse(storedHistory))
+        } catch (e) {
+          console.error('Failed to parse order history')
+        }
+      }
+
       setIsLoading(false)
     }
 
@@ -323,7 +336,55 @@ export default function ProfilePage({ params }: ProfilePageProps) {
             </form>
           </div>
           
-          <div className="text-center">
+          {/* --- Order History Card --- */}
+          {hasData && (
+             <div className="bg-card border border-border/50 rounded-2xl shadow-lg overflow-hidden backdrop-blur-sm mt-6">
+                <div className="p-6 md:p-8">
+                   <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-2 mb-6">
+                      <ShoppingBag className="w-4 h-4" /> Order History
+                   </h3>
+
+                   {orderHistory.length > 0 ? (
+                      <div className="space-y-4">
+                         {orderHistory.map((order, i) => (
+                            <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-border/50 bg-muted/30 hover:bg-muted/50 transition-colors gap-4">
+                               <div className="space-y-1">
+                                  <div className="flex items-center gap-2">
+                                     <span className="font-bold text-foreground">{order.ticket_id}</span>
+                                     <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-primary/10 text-primary">{order.status}</span>
+                                  </div>
+                                  <p className="text-xs text-muted-foreground">
+                                     {new Date(order.date).toLocaleDateString()} • {order.items_count} item(s)
+                                  </p>
+                               </div>
+                               <div className="flex items-center justify-between sm:justify-end gap-6 w-full sm:w-auto">
+                                  <div className="font-bold text-primary text-lg">
+                                     ₹{order.total_amount}
+                                  </div>
+                                  <Link 
+                                     href={`/${locale}/track/${order.ticket_id}`}
+                                     className="flex items-center gap-1 text-xs font-semibold bg-background border border-input shadow-sm px-3 py-1.5 rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors"
+                                  >
+                                     Track
+                                     <ChevronRight className="w-3 h-3" />
+                                  </Link>
+                               </div>
+                            </div>
+                         ))}
+                      </div>
+                   ) : (
+                      <div className="text-center py-8">
+                         <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center mx-auto mb-3">
+                            <ShoppingBag className="w-6 h-6 text-muted-foreground opacity-50" />
+                         </div>
+                         <p className="text-sm text-muted-foreground">No orders yet. They will appear here once you purchase.</p>
+                      </div>
+                   )}
+                </div>
+             </div>
+          )}
+
+          <div className="text-center mt-6">
             <p className="text-xs text-muted-foreground flex items-center justify-center gap-1">
               <Sparkles className="w-3 h-3 text-yellow-500" />
               Your details are stored locally on your device for faster checkout.

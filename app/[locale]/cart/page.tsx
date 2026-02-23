@@ -26,7 +26,25 @@ function CartPageContent({ locale }: { locale: string }) {
     setTimeout(() => setIsLoading(false), 600);
   }, []);
 
-  const handleCheckoutSubmit = async (userDetails: { name: string; phone: string; address: string }) => {
+  const handleCheckoutSubmit = async () => {
+    // Check for profile data
+    const storedUser = localStorage.getItem('bakery_user_info');
+    let userDetails = null;
+    
+    if (storedUser) {
+      try {
+        userDetails = JSON.parse(storedUser);
+      } catch (e) {
+        console.error('Failed to parse user data');
+      }
+    }
+
+    if (!userDetails || !userDetails.name || !userDetails.mobile || !userDetails.address) {
+      alert(t("cart.empty") || "Please fill your profile details first to place an order.");
+      router.push(`/${locale}/profile`);
+      return;
+    }
+
     setIsSubmitting(true);
     
     try {
@@ -49,8 +67,8 @@ function CartPageContent({ locale }: { locale: string }) {
           id: orderId,
           ticket_id: ticketId,
           user_name: userDetails.name,
-          user_phone: userDetails.phone,
-          delivery_address: userDetails.address,
+          user_phone: userDetails.mobile,
+          delivery_address: userDetails.address + (userDetails.pincode ? ` - ${userDetails.pincode}` : ''),
           total_amount: totalAmount,
           status: 'pending'
         });
@@ -71,8 +89,21 @@ function CartPageContent({ locale }: { locale: string }) {
 
       if (itemsError) throw itemsError;
 
+      // Save to local storage order history
+      const localHistoryKey = 'bakery_order_history';
+      const historyStr = localStorage.getItem(localHistoryKey);
+      let historyArray = historyStr ? JSON.parse(historyStr) : [];
+      historyArray.unshift({
+        id: orderId,
+        ticket_id: ticketId,
+        date: new Date().toISOString(),
+        total_amount: totalAmount,
+        status: 'pending',
+        items_count: items.length
+      });
+      localStorage.setItem(localHistoryKey, JSON.stringify(historyArray));
+
       clearCart();
-      setIsCheckoutModalOpen(false);
       router.push(`/${locale}/track/${ticketId}`);
       
     } catch (error) {
@@ -232,10 +263,11 @@ function CartPageContent({ locale }: { locale: string }) {
                 </div>
 
                 <button
-                  onClick={() => setIsCheckoutModalOpen(true)}
-                  disabled={items.length === 0}
-                  className="w-full px-6 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  onClick={handleCheckoutSubmit}
+                  disabled={items.length === 0 || isSubmitting}
+                  className="w-full flex justify-center items-center px-6 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
+                  {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : null}
                   {t("cart.checkout")}
                 </button>
 
@@ -250,72 +282,6 @@ function CartPageContent({ locale }: { locale: string }) {
           </div>
         )}
       </div>
-      
-      {isCheckoutModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="bg-card w-full max-w-md rounded-lg p-6 shadow-xl">
-            <h2 className="mb-4 text-xl font-bold">Checkout Details</h2>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                const formData = new FormData(e.currentTarget);
-                handleCheckoutSubmit({
-                  name: formData.get('name') as string,
-                  phone: formData.get('phone') as string,
-                  address: formData.get('address') as string,
-                });
-              }}
-              className="space-y-4"
-            >
-              <div>
-                <label className="mb-1 block text-sm font-medium">Full Name</label>
-                <input
-                  required
-                  name="name"
-                  type="text"
-                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                />
-              </div>
-              <div>
-                <label className="mb-1 block text-sm font-medium">WhatsApp Number (For Tracking)</label>
-                <input
-                  required
-                  name="phone"
-                  type="tel"
-                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                />
-              </div>
-              <div>
-                <label className="mb-1 block text-sm font-medium">Delivery Address</label>
-                <textarea
-                  required
-                  name="address"
-                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                  rows={3}
-                />
-              </div>
-              <div className="mt-6 flex justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => setIsCheckoutModalOpen(false)}
-                  disabled={isSubmitting}
-                  className="rounded-md px-4 py-2 text-sm font-medium hover:bg-muted"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
-                >
-                  {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  Confirm Order
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

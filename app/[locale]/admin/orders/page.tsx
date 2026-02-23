@@ -16,7 +16,7 @@ import { OrderStatusBadge } from '@/components/admin/order-status-badge'
 export default async function AdminOrdersPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
   const supabase = await createClient()
-  
+
   const { data: orders, error } = await supabase
     .from('orders')
     .select('*')
@@ -51,29 +51,29 @@ export default async function AdminOrdersPage({ params }: { params: Promise<{ lo
                 <TableCell className="font-mono">{order.ticket_id}</TableCell>
                 <TableCell>{order.user_name}</TableCell>
                 <TableCell>{order.user_phone}</TableCell>
-                <TableCell>${order.total_amount}</TableCell>
+                <TableCell>₹{order.total_amount}</TableCell>
                 <TableCell>
-                    <OrderStatusBadge status={order.status} />
+                  <OrderStatusBadge status={order.status} />
                 </TableCell>
                 <TableCell>
-                    {new Date(order.created_at).toLocaleDateString()}
+                  {new Date(order.created_at).toLocaleDateString()}
                 </TableCell>
                 <TableCell className="text-right">
-                    <Button variant="ghost" size="sm" asChild>
-                        <Link href={`/${locale}/admin/orders/${order.id}`}>
-                            <Eye className="h-4 w-4 mr-2" />
-                            View
-                        </Link>
-                    </Button>
+                  <Button variant="ghost" size="sm" asChild>
+                    <Link href={`/${locale}/admin/orders/${order.id}`}>
+                      <Eye className="h-4 w-4 mr-2" />
+                      View
+                    </Link>
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
             {!orders?.length && (
-                <TableRow>
-                    <TableCell colSpan={7} className="text-center h-24 text-muted-foreground">
-                        No orders found.
-                    </TableCell>
-                </TableRow>
+              <TableRow>
+                <TableCell colSpan={7} className="text-center h-24 text-muted-foreground">
+                  No orders found.
+                </TableCell>
+              </TableRow>
             )}
           </TableBody>
         </Table>

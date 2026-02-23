@@ -51,36 +51,36 @@ export default function DashboardCharts({ revenueByDay, ordersByStatus }: ChartD
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--muted-foreground))" strokeOpacity={0.2} />
-                <XAxis 
-                  dataKey="displayDate" 
-                  axisLine={false} 
-                  tickLine={false} 
-                  tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }} 
-                  dy={10} 
+                <XAxis
+                  dataKey="displayDate"
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fontSize: 12, fill: 'var(--muted-foreground)' }}
+                  dy={10}
                 />
-                <YAxis 
-                  tickFormatter={(val) => `₹${val}`} 
-                  axisLine={false} 
-                  tickLine={false} 
-                  tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
+                <YAxis
+                  tickFormatter={(val) => `₹${val}`}
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fontSize: 12, fill: 'var(--muted-foreground)' }}
                   width={60}
                 />
-                <Tooltip 
+                <Tooltip
                   formatter={(value: number) => [formatCurrency(value), 'Revenue']}
                   contentStyle={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))', borderRadius: '8px' }}
                 />
-                <Area 
-                  type="monotone" 
-                  dataKey="amount" 
-                  stroke="#f97316" 
+                <Area
+                  type="monotone"
+                  dataKey="amount"
+                  stroke="#f97316"
                   strokeWidth={2}
-                  fillOpacity={1} 
-                  fill="url(#colorAmount)" 
+                  fillOpacity={1}
+                  fill="url(#colorAmount)"
                 />
               </AreaChart>
             </ResponsiveContainer>
           ) : (
-             <div className="flex h-full items-center justify-center text-muted-foreground">No recent revenue data.</div>
+            <div className="flex h-full items-center justify-center text-muted-foreground">No recent revenue data.</div>
           )}
         </CardContent>
       </Card>
@@ -91,29 +91,29 @@ export default function DashboardCharts({ revenueByDay, ordersByStatus }: ChartD
           <CardDescription>Current state of all active orders.</CardDescription>
         </CardHeader>
         <CardContent className="h-[300px] w-full pt-4">
-           {ordersByStatus.length > 0 ? (
+          {ordersByStatus.length > 0 ? (
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={ordersByStatus} layout="vertical" margin={{ top: 0, right: 20, left: 20, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="hsl(var(--muted-foreground))" strokeOpacity={0.2} />
                 <XAxis type="number" hide />
-                <YAxis 
-                    dataKey="status" 
-                    type="category" 
-                    axisLine={false} 
-                    tickLine={false}
-                    tick={{ fontSize: 12, fill: 'hsl(var(--primary))' }}
-                    tickFormatter={(val: string) => val.charAt(0).toUpperCase() + val.slice(1)}
+                <YAxis
+                  dataKey="status"
+                  type="category"
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fontSize: 12, fill: 'var(--foreground)' }}
+                  tickFormatter={(val: string) => val.charAt(0).toUpperCase() + val.slice(1)}
                 />
-                <Tooltip 
-                  cursor={{ fill: 'hsl(var(--muted))' }}
-                  contentStyle={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))', borderRadius: '8px' }}
+                <Tooltip
+                  // cursor={{ fill: 'var(--primary)' }}
+                  contentStyle={{ backgroundColor: 'var(--primary)', borderColor: 'hsl(var(--border))', borderRadius: '8px' }}
                 />
-                <Bar dataKey="count" fill="hsl(var(--primary))" radius={[0, 4, 4, 0]} barSize={30} label={{ position: 'right', fill: 'hsl(var(--foreground))' }} />
+                <Bar dataKey="count" fill="var(--primary)" radius={[0, 4, 4, 0]} barSize={30} label={{ position: 'right', fill: 'var(--foreground)' }} />
               </BarChart>
             </ResponsiveContainer>
-           ) : (
-                <div className="flex h-full items-center justify-center text-muted-foreground">No order status data.</div>
-           )}
+          ) : (
+            <div className="flex h-full items-center justify-center text-muted-foreground">No order status data.</div>
+          )}
         </CardContent>
       </Card>
     </div>

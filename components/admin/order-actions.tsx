@@ -24,11 +24,11 @@ export default function OrderActions({ order }: OrderActionsProps) {
 
   useEffect(() => {
     async function getRole() {
-       const { data: { user } } = await supabase.auth.getUser()
-       if (user) {
-         const { data } = await supabase.from('profiles').select('role').eq('id', user.id).single()
-         setRole(data?.role)
-       }
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        const { data } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+        setRole(data?.role)
+      }
     }
     getRole()
   }, [])
@@ -41,10 +41,10 @@ export default function OrderActions({ order }: OrderActionsProps) {
       .eq('id', order.id)
 
     if (error) {
-       alert('Failed to update order')
-       console.error(error)
+      alert('Failed to update order')
+      console.error(error)
     } else {
-       router.refresh()
+      router.refresh()
     }
     setLoading(false)
   }
@@ -55,7 +55,7 @@ export default function OrderActions({ order }: OrderActionsProps) {
     const message = `Hello ${order.user_name}, 
     
 Your order #${order.ticket_id} is *${status.toUpperCase()}*.
-Total Amount: $${order.total_amount}
+Total Amount: ₹${order.total_amount}
 
 You can track your order and download your e-bill here:
 ${trackingLink}
@@ -80,44 +80,44 @@ Thank you for choosing CrumsOBliss!`
         {isAdmin && (
           <>
             <div className="space-y-2">
-               <label className="text-sm font-medium">Status</label>
-               <Select value={status} onValueChange={setStatus}>
-                 <SelectTrigger>
-                   <SelectValue />
-                 </SelectTrigger>
-                 <SelectContent>
-                   <SelectItem value="pending">Pending</SelectItem>
-                   <SelectItem value="confirmed">Confirmed</SelectItem>
-                   <SelectItem value="delivered">Delivered</SelectItem>
-                   <SelectItem value="cancelled">Cancelled</SelectItem>
-                 </SelectContent>
-               </Select>
+              <label className="text-sm font-medium">Status</label>
+              <Select value={status} onValueChange={setStatus}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="pending">Pending</SelectItem>
+                  <SelectItem value="confirmed">Confirmed</SelectItem>
+                  <SelectItem value="delivered">Delivered</SelectItem>
+                  <SelectItem value="cancelled">Cancelled</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-            
+
             <div className="space-y-2">
-               <label className="text-sm font-medium">Admin Notes</label>
-               <Textarea 
-                 placeholder="Add notes for the team or customer..." 
-                 value={notes}
-                 onChange={(e) => setNotes(e.target.value)}
-               />
+              <label className="text-sm font-medium">Admin Notes</label>
+              <Textarea
+                placeholder="Add notes for the team or customer..."
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+              />
             </div>
 
             <Button onClick={handleUpdate} disabled={loading} className="w-full">
-               {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Save className="h-4 w-4 mr-2" />}
-               Update Order
+              {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Save className="h-4 w-4 mr-2" />}
+              Update Order
             </Button>
           </>
         )}
 
         <Button variant="outline" onClick={handleWhatsApp} className="w-full border-green-500 text-green-600 hover:bg-green-50">
-           <Send className="h-4 w-4 mr-2" />
-           Send Bill Link on WhatsApp
+          <Send className="h-4 w-4 mr-2" />
+          Send Bill Link on WhatsApp
         </Button>
 
         <Button variant="outline" onClick={() => window.open(`/api/generate-bill?ticket_id=${order.ticket_id}`, '_blank')} className="w-full border-primary text-primary hover:bg-primary/5">
-           <Download className="h-4 w-4 mr-2" />
-           Download PDF Bill
+          <Download className="h-4 w-4 mr-2" />
+          Download PDF Bill
         </Button>
       </CardContent>
     </Card>

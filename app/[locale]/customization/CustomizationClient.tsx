@@ -92,15 +92,23 @@ export default function CustomizationClient({ catalogues }: { catalogues: any[] 
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
+    
+    const storedUser = localStorage.getItem('bakery_user_info');
+    let userDetails = null;
+    if (storedUser) {
+      try {
+        userDetails = JSON.parse(storedUser);
+      } catch(e) {}
+    }
 
-    const userDetails = {
-      name: formData.name,
-      mobile: formData.mobile,
-      address: formData.address,
-      pincode: formData.pincode
-    };
-    localStorage.setItem('bakery_user_info', JSON.stringify(userDetails));
+    if (!userDetails || !userDetails.name || !userDetails.mobile || !userDetails.address) {
+      alert("Please fill your profile details first to place a custom order.");
+      const currentLocale = window.location.pathname.split('/')[1] || 'en';
+      window.location.href = `/${currentLocale}/profile`;
+      return;
+    }
+
+    setIsSubmitting(true);
 
     const phoneNumber = details.contact.primaryPhone; 
     let detailsText = '';
@@ -117,7 +125,22 @@ export default function CustomizationClient({ catalogues }: { catalogues: any[] 
       detailsText = `*Type:* 🍽️ Special Request\n*Description:* ${formData.description || 'N/A'}`;
     }
 
-    const finalMessage = `*New Order Request* ✨\n\n${detailsText.trim()}\n\n*Customer Details:*\nName: ${formData.name}\nPhone: ${formData.mobile}\nAddress: ${formData.address} (${formData.pincode})`.trim();
+    const finalMessage = `*New Order Request* ✨\n\n${detailsText.trim()}\n\n*Customer Details:*\nName: ${userDetails.name}\nPhone: ${userDetails.mobile}\nAddress: ${userDetails.address} (${userDetails.pincode || ''})`.trim();
+
+    // Save to order history locally
+    const ticketId = `CST-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+    const localHistoryKey = 'bakery_order_history';
+    const historyStr = localStorage.getItem(localHistoryKey);
+    let historyArray = historyStr ? JSON.parse(historyStr) : [];
+    historyArray.unshift({
+      id: ticketId,
+      ticket_id: ticketId,
+      date: new Date().toISOString(),
+      total_amount: "Custom",
+      status: 'pending',
+      items_count: 1
+    });
+    localStorage.setItem(localHistoryKey, JSON.stringify(historyArray));
 
     setTimeout(() => {
       window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(finalMessage)}`, '_blank');
@@ -332,16 +355,6 @@ export default function CustomizationClient({ catalogues }: { catalogues: any[] 
                         <div className="space-y-2"><label className="text-sm font-medium">Describe your request</label><textarea name="description" required rows={5} placeholder="Tell us exactly what you need..." className="w-full p-3 rounded-lg border bg-background focus:ring-2 focus:ring-primary outline-none resize-none" onChange={handleInputChange}/></div>
                      </div>
                   )}
-                </div>
-
-                <div className="space-y-6">
-                   <h3 className="text-sm font-bold uppercase tracking-widest text-muted-foreground border-b pb-2">Contact Details</h3>
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-2 relative"><label className="text-sm font-medium">Your Name</label><div className="relative"><User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" /><input name="name" required value={formData.name} placeholder="Full Name" className="w-full pl-10 p-3 rounded-lg border bg-background focus:ring-2 focus:ring-primary outline-none" onChange={handleInputChange}/></div></div>
-                      <div className="space-y-2 relative"><label className="text-sm font-medium">Mobile Number</label><div className="relative"><Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" /><input name="mobile" required type="tel" pattern="[0-9]{10}" value={formData.mobile} placeholder="10-digit Number" className="w-full pl-10 p-3 rounded-lg border bg-background focus:ring-2 focus:ring-primary outline-none" onChange={handleInputChange}/></div></div>
-                      <div className="space-y-2 md:col-span-2 relative"><label className="text-sm font-medium">Delivery Address</label><div className="relative"><MapPin className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" /><textarea name="address" required rows={2} value={formData.address} placeholder="House No, Street, Landmark..." className="w-full pl-10 p-3 rounded-lg border bg-background focus:ring-2 focus:ring-primary outline-none resize-none" onChange={handleInputChange}/></div></div>
-                      <div className="space-y-2"><label className="text-sm font-medium">Pincode</label><input name="pincode" required type="text" pattern="[0-9]{6}" value={formData.pincode} placeholder="6-digit PIN" className="w-full p-3 rounded-lg border bg-background focus:ring-2 focus:ring-primary outline-none" onChange={handleInputChange}/></div>
-                   </div>
                 </div>
 
                 <div className="pt-4">
