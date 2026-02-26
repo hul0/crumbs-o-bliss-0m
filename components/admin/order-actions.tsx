@@ -72,52 +72,53 @@ Thank you for choosing CrumsOBliss!`
   const isAdmin = role === 'admin'
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Actions</CardTitle>
+    <Card className="rounded-sm shadow-none border">
+      <CardHeader className="border-b pb-4 mb-4">
+        <CardTitle className="text-base font-semibold uppercase tracking-wider">Execute Actions</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         {isAdmin && (
           <>
             <div className="space-y-2">
-              <label className="text-sm font-medium">Status</label>
+              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Modify Status</label>
               <Select value={status} onValueChange={setStatus}>
-                <SelectTrigger>
+                <SelectTrigger className="rounded-sm h-8 text-xs font-semibold uppercase tracking-wider">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="pending">Pending</SelectItem>
-                  <SelectItem value="confirmed">Confirmed</SelectItem>
-                  <SelectItem value="delivered">Delivered</SelectItem>
-                  <SelectItem value="cancelled">Cancelled</SelectItem>
+                <SelectContent className="rounded-sm">
+                  <SelectItem value="pending" className="text-xs font-semibold uppercase tracking-wider">PENDING</SelectItem>
+                  <SelectItem value="confirmed" className="text-xs font-semibold uppercase tracking-wider">CONFIRMED</SelectItem>
+                  <SelectItem value="delivered" className="text-xs font-semibold uppercase tracking-wider">DELIVERED</SelectItem>
+                  <SelectItem value="cancelled" className="text-xs font-semibold uppercase tracking-wider">CANCELLED</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium">Admin Notes</label>
+              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Admin Audit Notes</label>
               <Textarea
-                placeholder="Add notes for the team or customer..."
+                placeholder="Log internal system notes..."
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
+                className="rounded-sm min-h-[80px] text-sm"
               />
             </div>
 
-            <Button onClick={handleUpdate} disabled={loading} className="w-full">
-              {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Save className="h-4 w-4 mr-2" />}
-              Update Order
+            <Button onClick={handleUpdate} disabled={loading} className="w-full rounded-sm h-8 text-xs font-semibold uppercase tracking-wider">
+              {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin mr-2" /> : <Save className="h-3.5 w-3.5 mr-2" />}
+              {loading ? "COMMITTING..." : "COMMIT CHANGES"}
             </Button>
           </>
         )}
 
-        <Button variant="outline" onClick={handleWhatsApp} className="w-full border-green-500 text-green-600 hover:bg-green-50">
-          <Send className="h-4 w-4 mr-2" />
-          Send Bill Link on WhatsApp
+        <Button variant="outline" onClick={handleWhatsApp} className="w-full rounded-sm h-8 text-xs font-semibold uppercase tracking-wider border-green-500/50 text-green-600 dark:text-green-500 hover:bg-green-500/10">
+          <Send className="h-3.5 w-3.5 mr-2" />
+          NOTIFY VIA WHATSAPP
         </Button>
 
-        <Button variant="outline" onClick={() => window.open(`/api/generate-bill?ticket_id=${order.ticket_id}`, '_blank')} className="w-full border-primary text-primary hover:bg-primary/5">
-          <Download className="h-4 w-4 mr-2" />
-          Download PDF Bill
+        <Button variant="outline" onClick={() => window.open(`/api/generate-bill?ticket_id=${order.ticket_id}`, '_blank')} className="w-full rounded-sm h-8 text-xs font-semibold uppercase tracking-wider">
+          <Download className="h-3.5 w-3.5 mr-2" />
+          GENERATE PDF BILL
         </Button>
       </CardContent>
     </Card>

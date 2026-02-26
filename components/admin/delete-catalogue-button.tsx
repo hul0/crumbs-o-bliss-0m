@@ -16,7 +16,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger,
-  } from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog"
 
 export default function DeleteCatalogueButton({ id }: { id: string }) {
     const [loading, setLoading] = useState(false)
@@ -38,21 +38,21 @@ export default function DeleteCatalogueButton({ id }: { id: string }) {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive/90">
-                    {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-sm text-destructive hover:text-destructive hover:bg-destructive/10">
+                    {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Trash2 className="h-3.5 w-3.5" />}
                 </Button>
             </AlertDialogTrigger>
-            <AlertDialogContent>
+            <AlertDialogContent className="rounded-sm">
                 <AlertDialogHeader>
-                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                        This will delete the catalogue. Products within it will NOT be deleted, only the association.
+                    <AlertDialogTitle className="uppercase tracking-wider text-sm font-semibold text-destructive">Confirm Deletion</AlertDialogTitle>
+                    <AlertDialogDescription className="text-xs">
+                        This will sever the catalogue entity. Associated products remain in the database unlinked.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-                        Delete
+                    <AlertDialogCancel className="rounded-sm h-8 px-3 text-xs font-semibold uppercase tracking-wider">CANCEL</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleDelete} className="rounded-sm h-8 px-3 text-xs font-semibold uppercase tracking-wider bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                        CONFIRM PURGE
                     </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>

@@ -16,7 +16,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger,
-  } from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog"
 
 export default function DeleteProductButton({ id }: { id: string }) {
     const [loading, setLoading] = useState(false)
@@ -30,7 +30,7 @@ export default function DeleteProductButton({ id }: { id: string }) {
 
         console.log('Attempting to delete product with ID:', id)
         const { data, error } = await supabase.from('products').delete().eq('id', id).select()
-        
+
         console.log('Delete response:', { data, error })
 
         if (error) {
@@ -49,21 +49,21 @@ export default function DeleteProductButton({ id }: { id: string }) {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive/90">
-                    {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-sm text-destructive hover:text-destructive hover:bg-destructive/10">
+                    {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Trash2 className="h-3.5 w-3.5" />}
                 </Button>
             </AlertDialogTrigger>
-            <AlertDialogContent>
+            <AlertDialogContent className="rounded-sm">
                 <AlertDialogHeader>
-                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete the product.
+                    <AlertDialogTitle className="uppercase tracking-wider text-sm font-semibold text-destructive">Confirm Deletion</AlertDialogTitle>
+                    <AlertDialogDescription className="text-xs">
+                        This action is irreversible. The record will be permanently purged from the system database.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-                        Delete
+                    <AlertDialogCancel className="rounded-sm h-8 px-3 text-xs font-semibold uppercase tracking-wider">CANCEL</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleDelete} className="rounded-sm h-8 px-3 text-xs font-semibold uppercase tracking-wider bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                        CONFIRM PURGE
                     </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>

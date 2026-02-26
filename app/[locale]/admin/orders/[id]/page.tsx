@@ -34,10 +34,10 @@ export default async function OrderDetailsPage({ params }: Props) {
 
     return (
         <div className="space-y-6">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between pb-4 border-b">
                 <div>
-                    <h1 className="text-lg font-semibold md:text-2xl">Order Details</h1>
-                    <p className="text-muted-foreground">Ticket ID: {order.ticket_id}</p>
+                    <h1 className="text-2xl font-semibold tracking-tight text-foreground uppercase">Order Manifest</h1>
+                    <p className="text-sm font-mono text-muted-foreground mt-1">ID: {order.ticket_id}</p>
                 </div>
                 <div className="flex items-center gap-2">
                     <OrderStatusBadge status={order.status} />
@@ -46,26 +46,26 @@ export default async function OrderDetailsPage({ params }: Props) {
 
             <div className="grid md:grid-cols-3 gap-6">
                 <div className="md:col-span-2 space-y-6">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Items</CardTitle>
+                    <Card className="rounded-sm shadow-none border">
+                        <CardHeader className="border-b pb-4 mb-4">
+                            <CardTitle className="text-base font-semibold uppercase tracking-wider">Line Items</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="space-y-4">
                                 {items?.map((item) => (
-                                    <div key={item.id} className="flex justify-between items-center bg-muted/30 p-3 rounded-lg">
+                                    <div key={item.id} className="flex justify-between items-center bg-muted/30 p-3 rounded-sm border">
                                         <div>
-                                            <p className="font-medium">{item.product_name}</p>
-                                            <p className="text-sm text-muted-foreground">Qty: {item.quantity} × ₹{item.price_at_time}</p>
+                                            <p className="font-medium text-sm">{item.product_name}</p>
+                                            <p className="text-xs font-mono text-muted-foreground mt-0.5">QTY: {item.quantity} × ₹{item.price_at_time}</p>
                                         </div>
-                                        <div className="font-medium">
+                                        <div className="font-semibold text-sm">
                                             ₹{(item.quantity * item.price_at_time).toFixed(2)}
                                         </div>
                                     </div>
                                 ))}
                                 <Separator />
                                 <div className="flex justify-between items-center pt-2">
-                                    <span className="font-semibold">Total</span>
+                                    <span className="text-sm font-bold uppercase tracking-wider">Summary Total</span>
                                     <span className="font-bold text-lg">₹{order.total_amount}</span>
                                 </div>
                             </div>
@@ -77,39 +77,39 @@ export default async function OrderDetailsPage({ params }: Props) {
                 </div>
 
                 <div className="space-y-6">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Customer</CardTitle>
+                    <Card className="rounded-sm shadow-none border">
+                        <CardHeader className="border-b pb-4 mb-4">
+                            <CardTitle className="text-base font-semibold uppercase tracking-wider">Client Profile</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                            <div>
-                                <p className="text-sm font-medium text-muted-foreground">Name</p>
-                                <p>{order.user_name}</p>
+                            <div className="grid gap-1">
+                                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Entity Name</p>
+                                <p className="text-sm">{order.user_name}</p>
                             </div>
-                            <div>
-                                <p className="text-sm font-medium text-muted-foreground">Phone</p>
-                                <p>{order.user_phone}</p>
+                            <div className="grid gap-1">
+                                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Contact</p>
+                                <p className="text-sm font-mono">{order.user_phone}</p>
                             </div>
-                            <div>
-                                <p className="text-sm font-medium text-muted-foreground">Address</p>
-                                <p>{order.delivery_address}</p>
+                            <div className="grid gap-1">
+                                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Location Drop</p>
+                                <p className="text-sm leading-relaxed">{order.delivery_address}</p>
                             </div>
                             {order.user_email && (
-                                <div>
-                                    <p className="text-sm font-medium text-muted-foreground">Email</p>
-                                    <p>{order.user_email}</p>
+                                <div className="grid gap-1">
+                                    <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Identifier</p>
+                                    <p className="text-sm">{order.user_email}</p>
                                 </div>
                             )}
                         </CardContent>
                     </Card>
 
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Notes</CardTitle>
+                    <Card className="rounded-sm shadow-none border bg-muted/10">
+                        <CardHeader className="border-b pb-4 mb-4">
+                            <CardTitle className="text-base font-semibold uppercase tracking-wider flex items-center gap-2">System Audit Logs</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <p className="text-sm text-muted-foreground whitespace-pre-wrap">
-                                {order.admin_notes || "No notes added."}
+                            <p className="text-xs font-mono text-muted-foreground whitespace-pre-wrap leading-relaxed">
+                                {order.admin_notes || "NO AUDIT ENTRIES LOGGED."}
                             </p>
                         </CardContent>
                     </Card>
