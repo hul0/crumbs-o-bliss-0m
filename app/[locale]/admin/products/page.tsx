@@ -27,17 +27,17 @@ export default async function ProductsPage() {
   const { data: products } = await supabase.from('products').select('*').order('created_at', { ascending: false })
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h1 className="text-lg font-semibold md:text-2xl">Products</h1>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between pb-4 border-b">
+        <h1 className="text-2xl font-semibold tracking-tight text-foreground">Products Database</h1>
         <Dialog>
           <DialogTrigger asChild>
-            <Button>
-              <Plus className="mr-2 h-4 w-4" />
-              Add Product
+            <Button className="rounded-sm font-semibold text-xs tracking-wider uppercase h-8 px-3">
+              <Plus className="mr-2 h-3.5 w-3.5" />
+              ADD RECORD
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto rounded-sm">
             <DialogHeader>
               <DialogTitle>Add New Product</DialogTitle>
               <DialogDescription>Create a new product for the catalog.</DialogDescription>
@@ -47,43 +47,43 @@ export default async function ProductsPage() {
         </Dialog>
       </div>
 
-      <div className="border rounded-lg p-4 bg-background">
+      <div className="border rounded-sm bg-card shadow-none">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead className="w-[80px]">Image</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Category</TableHead>
-              <TableHead>Price</TableHead>
-              <TableHead>Stock</TableHead>
-              <TableHead>Views</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+            <TableRow className="hover:bg-transparent">
+              <TableHead className="w-[80px] text-xs uppercase tracking-wider font-semibold">IMAGE</TableHead>
+              <TableHead className="text-xs uppercase tracking-wider font-semibold">NAME</TableHead>
+              <TableHead className="text-xs uppercase tracking-wider font-semibold">CATEGORY</TableHead>
+              <TableHead className="text-xs uppercase tracking-wider font-semibold">PRICE</TableHead>
+              <TableHead className="text-xs uppercase tracking-wider font-semibold">STOCK</TableHead>
+              <TableHead className="text-xs uppercase tracking-wider font-semibold">VIEWS</TableHead>
+              <TableHead className="text-right text-xs uppercase tracking-wider font-semibold">ACTIONS</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {products?.map((product) => (
-              <TableRow key={product.id}>
+              <TableRow key={product.id} className="group">
                 <TableCell>
                   {product.image_url && (
-                    <div className="relative w-10 h-10 rounded overflow-hidden">
+                    <div className="relative w-8 h-8 rounded-[2px] overflow-hidden border">
                       <Image src={product.image_url} alt={product.name} fill className="object-cover" />
                     </div>
                   )}
                 </TableCell>
-                <TableCell className="font-medium">{product.name}</TableCell>
-                <TableCell className="capitalize">{product.category}</TableCell>
-                <TableCell>₹{product.price}</TableCell>
-                <TableCell>{product.stock}</TableCell>
-                <TableCell>{product.view_count}</TableCell>
+                <TableCell className="font-medium text-sm">{product.name}</TableCell>
+                <TableCell className="capitalize text-sm text-muted-foreground">{product.category}</TableCell>
+                <TableCell className="text-sm">₹{product.price}</TableCell>
+                <TableCell className="text-sm">{product.stock}</TableCell>
+                <TableCell className="text-sm font-mono text-muted-foreground">{product.view_count}</TableCell>
                 <TableCell className="text-right">
-                  <div className="flex items-center justify-end gap-2">
+                  <div className="flex items-center justify-end gap-1">
                     <Dialog>
                       <DialogTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                          <Pencil className="h-4 w-4" />
+                        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-sm hover:bg-muted">
+                          <Pencil className="h-3.5 w-3.5 text-muted-foreground hover:text-foreground" />
                         </Button>
                       </DialogTrigger>
-                      <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
+                      <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto rounded-sm">
                         <DialogHeader>
                           <DialogTitle>Edit Product</DialogTitle>
                         </DialogHeader>
@@ -97,8 +97,8 @@ export default async function ProductsPage() {
             ))}
             {!products?.length && (
               <TableRow>
-                <TableCell colSpan={7} className="text-center h-24 text-muted-foreground">
-                  No products found. Add some!
+                <TableCell colSpan={7} className="text-center h-24 text-sm text-muted-foreground">
+                  No records found in database.
                 </TableCell>
               </TableRow>
             )}

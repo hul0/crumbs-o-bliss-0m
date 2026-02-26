@@ -35,12 +35,12 @@ export default function DashboardCharts({ revenueByDay, ordersByStatus }: ChartD
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-      <Card className="col-span-1 lg:col-span-4">
-        <CardHeader>
-          <CardTitle>Revenue Overview (Last 7 Days)</CardTitle>
-          <CardDescription>Daily revenue performance.</CardDescription>
+      <Card className="col-span-1 lg:col-span-4 rounded-sm shadow-none border">
+        <CardHeader className="border-b pb-4 mb-4">
+          <CardTitle className="text-base font-semibold uppercase tracking-wider">Revenue Overview</CardTitle>
+          <CardDescription className="text-xs">Trailing 7-day performance</CardDescription>
         </CardHeader>
-        <CardContent className="h-[300px] w-full pt-4">
+        <CardContent className="h-[300px] w-full pt-0">
           {formattedRevenue.length > 0 ? (
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={formattedRevenue} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
@@ -55,19 +55,19 @@ export default function DashboardCharts({ revenueByDay, ordersByStatus }: ChartD
                   dataKey="displayDate"
                   axisLine={false}
                   tickLine={false}
-                  tick={{ fontSize: 12, fill: 'var(--muted-foreground)' }}
+                  tick={{ fontSize: 10, fill: 'var(--muted-foreground)' }}
                   dy={10}
                 />
                 <YAxis
                   tickFormatter={(val) => `₹${val}`}
                   axisLine={false}
                   tickLine={false}
-                  tick={{ fontSize: 12, fill: 'var(--muted-foreground)' }}
+                  tick={{ fontSize: 10, fill: 'var(--muted-foreground)' }}
                   width={60}
                 />
                 <Tooltip
                   formatter={(value: number) => [formatCurrency(value), 'Revenue']}
-                  contentStyle={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))', borderRadius: '8px' }}
+                  contentStyle={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))', borderRadius: '2px', fontSize: '12px' }}
                 />
                 <Area
                   type="monotone"
@@ -80,17 +80,17 @@ export default function DashboardCharts({ revenueByDay, ordersByStatus }: ChartD
               </AreaChart>
             </ResponsiveContainer>
           ) : (
-            <div className="flex h-full items-center justify-center text-muted-foreground">No recent revenue data.</div>
+            <div className="flex h-full items-center justify-center text-xs text-muted-foreground">Insufficient data.</div>
           )}
         </CardContent>
       </Card>
 
-      <Card className="col-span-1 lg:col-span-3">
-        <CardHeader>
-          <CardTitle>Orders by Status</CardTitle>
-          <CardDescription>Current state of all active orders.</CardDescription>
+      <Card className="col-span-1 lg:col-span-3 rounded-sm shadow-none border">
+        <CardHeader className="border-b pb-4 mb-4">
+          <CardTitle className="text-base font-semibold uppercase tracking-wider">Order States</CardTitle>
+          <CardDescription className="text-xs">Current systematic distribution</CardDescription>
         </CardHeader>
-        <CardContent className="h-[300px] w-full pt-4">
+        <CardContent className="h-[300px] w-full pt-0">
           {ordersByStatus.length > 0 ? (
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={ordersByStatus} layout="vertical" margin={{ top: 0, right: 20, left: 20, bottom: 0 }}>
@@ -101,18 +101,18 @@ export default function DashboardCharts({ revenueByDay, ordersByStatus }: ChartD
                   type="category"
                   axisLine={false}
                   tickLine={false}
-                  tick={{ fontSize: 12, fill: 'var(--foreground)' }}
-                  tickFormatter={(val: string) => val.charAt(0).toUpperCase() + val.slice(1)}
+                  tick={{ fontSize: 10, fill: 'var(--foreground)' }}
+                  tickFormatter={(val: string) => val.toUpperCase()}
                 />
                 <Tooltip
-                  // cursor={{ fill: 'var(--primary)' }}
-                  contentStyle={{ backgroundColor: 'var(--primary)', borderColor: 'hsl(var(--border))', borderRadius: '8px' }}
+                  contentStyle={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))', borderRadius: '2px', fontSize: '12px', color: 'var(--foreground)' }}
+                  cursor={{ fill: 'hsl(var(--muted))' }}
                 />
-                <Bar dataKey="count" fill="var(--primary)" radius={[0, 4, 4, 0]} barSize={30} label={{ position: 'right', fill: 'var(--foreground)' }} />
+                <Bar dataKey="count" fill="var(--primary)" radius={[2, 2, 2, 2]} barSize={20} label={{ position: 'right', fill: 'var(--foreground)', fontSize: 10 }} />
               </BarChart>
             </ResponsiveContainer>
           ) : (
-            <div className="flex h-full items-center justify-center text-muted-foreground">No order status data.</div>
+            <div className="flex h-full items-center justify-center text-xs text-muted-foreground">No data available.</div>
           )}
         </CardContent>
       </Card>

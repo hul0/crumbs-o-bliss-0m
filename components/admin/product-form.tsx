@@ -357,9 +357,9 @@ export default function ProductForm({ product, onSuccess }: ProductFormProps) {
             )}
           />
 
-          <Button type="submit" disabled={loading || uploading}>
+          <Button type="submit" disabled={loading || uploading} className="w-full rounded-sm h-10 text-xs font-semibold uppercase tracking-wider">
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Save Product
+            {loading ? "COMMITTING..." : "COMMIT CHANGES"}
           </Button>
         </form>
       </Form>

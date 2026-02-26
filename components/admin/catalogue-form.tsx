@@ -53,16 +53,16 @@ export default function CatalogueForm({ catalogue, onSuccess }: CatalogueFormPro
     let error
 
     if (catalogue?.id) {
-       const { error: updateError } = await supabase
+      const { error: updateError } = await supabase
         .from('custom_catalogues')
         .update(values)
         .eq('id', catalogue.id)
-       error = updateError
+      error = updateError
     } else {
-       const { error: insertError } = await supabase
+      const { error: insertError } = await supabase
         .from('custom_catalogues')
         .insert([values])
-       error = insertError
+      error = insertError
     }
 
     setLoading(false)
@@ -95,7 +95,7 @@ export default function CatalogueForm({ catalogue, onSuccess }: CatalogueFormPro
             </FormItem>
           )}
         />
-        
+
         <FormField
           control={form.control}
           name="description"
@@ -123,7 +123,7 @@ export default function CatalogueForm({ catalogue, onSuccess }: CatalogueFormPro
             </FormItem>
           )}
         />
-        
+
         <FormField
           control={form.control}
           name="is_active"
@@ -142,9 +142,9 @@ export default function CatalogueForm({ catalogue, onSuccess }: CatalogueFormPro
           )}
         />
 
-        <Button type="submit" disabled={loading}>
+        <Button type="submit" disabled={loading} className="w-full rounded-sm h-10 text-xs font-semibold uppercase tracking-wider">
           {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          Save Catalogue
+          {loading ? "COMMITTING..." : "COMMIT CHANGES"}
         </Button>
       </form>
     </Form>

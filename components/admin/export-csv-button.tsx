@@ -29,7 +29,7 @@ export default function ExportCsvButton() {
                 )
             `)
             .order('created_at', { ascending: false })
-            
+
         if (!orders || orders.length === 0) {
             alert('No data to export')
             setLoading(false)
@@ -42,8 +42,8 @@ export default function ExportCsvButton() {
             headers.join(','),
             ...orders.map(order => {
                 // Format items beautifully: "2x Pizza, 1x Cake"
-                const itemsStr = order.order_items 
-                    ? order.order_items.map((i: any) => `${i.quantity}x ${i.product_name}`).join(' | ') 
+                const itemsStr = order.order_items
+                    ? order.order_items.map((i: any) => `${i.quantity}x ${i.product_name}`).join(' | ')
                     : 'No items';
 
                 // Escape commas and quotes for CSV
@@ -75,14 +75,14 @@ export default function ExportCsvButton() {
         document.body.appendChild(link)
         link.click()
         document.body.removeChild(link)
-        
+
         setLoading(false)
     }
 
     return (
-        <Button variant="outline" size="sm" onClick={handleExport} disabled={loading}>
-            <Download className="mr-2 h-4 w-4" />
-            Export CSV
+        <Button variant="outline" size="sm" onClick={handleExport} disabled={loading} className="rounded-sm text-xs font-semibold tracking-wider uppercase h-8 px-3 border border-border/50 bg-card hover:bg-muted/50">
+            <Download className="mr-2 h-3.5 w-3.5" />
+            {loading ? "EXPORTING..." : "EXPORT CSV"}
         </Button>
     )
 }
