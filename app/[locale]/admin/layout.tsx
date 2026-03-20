@@ -72,6 +72,13 @@ export default async function AdminLayout({
                   <Package className="h-4 w-4" />
                   CATALOGUES
                 </Link>
+                <Link
+                  href={`/${locale}/admin/special-images`}
+                  className="flex items-center gap-3 rounded-sm px-3 py-2 text-muted-foreground transition-colors hover:text-foreground hover:bg-muted"
+                >
+                  <Package className="h-4 w-4" />
+                  SPECIAL IMAGES
+                </Link>
               </>
             )}
             <Link
@@ -131,6 +138,13 @@ export default async function AdminLayout({
                     >
                       <Package className="h-5 w-5" />
                       CATALOGUES
+                    </Link>
+                    <Link
+                      href={`/${locale}/admin/special-images`}
+                      className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                    >
+                      <Package className="h-5 w-5" />
+                      SPECIAL IMAGES
                     </Link>
                   </>
                 )}

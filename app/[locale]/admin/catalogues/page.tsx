@@ -53,6 +53,7 @@ export default async function CataloguesPage({ params }: { params: Promise<{ loc
             <TableRow className="hover:bg-transparent">
               <TableHead className="w-[80px] text-xs uppercase tracking-wider font-semibold">IMAGE</TableHead>
               <TableHead className="text-xs uppercase tracking-wider font-semibold">NAME</TableHead>
+              <TableHead className="text-xs uppercase tracking-wider font-semibold">PRICE</TableHead>
               <TableHead className="text-xs uppercase tracking-wider font-semibold">ACTIVE</TableHead>
               <TableHead className="text-xs uppercase tracking-wider font-semibold">CREATED</TableHead>
               <TableHead className="text-right text-xs uppercase tracking-wider font-semibold">ACTIONS</TableHead>
@@ -71,6 +72,9 @@ export default async function CataloguesPage({ params }: { params: Promise<{ loc
                   )}
                 </TableCell>
                 <TableCell className="font-medium text-sm">{cat.name}</TableCell>
+                <TableCell className="text-sm font-semibold">
+                  {cat.price ? `₹${cat.price}` : <span className="text-muted-foreground text-[10px]">FIXED ITEMS</span>}
+                </TableCell>
                 <TableCell className="text-sm">
                   {cat.is_active ?
                     <span className="inline-flex items-center px-2 py-0.5 rounded-[2px] text-[10px] font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">TRUE</span> :

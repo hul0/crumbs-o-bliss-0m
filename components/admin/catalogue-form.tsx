@@ -24,6 +24,7 @@ import { useRouter } from 'next/navigation'
 const formSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   description: z.string().optional(),
+  price: z.preprocess((val) => val === '' ? undefined : Number(val), z.number().optional()),
   image_url: z.string().optional(), // Could add image upload here too if needed
   is_active: z.boolean().default(true),
 })
@@ -43,6 +44,7 @@ export default function CatalogueForm({ catalogue, onSuccess }: CatalogueFormPro
     defaultValues: {
       name: catalogue?.name || '',
       description: catalogue?.description || '',
+      price: catalogue?.price || '',
       image_url: catalogue?.image_url || '',
       is_active: catalogue?.is_active ?? true,
     },
@@ -90,6 +92,20 @@ export default function CatalogueForm({ catalogue, onSuccess }: CatalogueFormPro
               <FormLabel>Name</FormLabel>
               <FormControl>
                 <Input placeholder="Summer Sale" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="price"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Bundle Price (Optional)</FormLabel>
+              <FormControl>
+                <Input type="number" placeholder="999" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
