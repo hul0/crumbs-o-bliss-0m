@@ -12,11 +12,11 @@ import path from 'path';
 // Highlight: #fcb042 (Orange)
 
 const styles = StyleSheet.create({
-  page: { 
-    padding: 0, 
-    fontFamily: 'Helvetica', 
-    backgroundColor: '#ffffff', 
-    color: '#164a3e' 
+  page: {
+    padding: 0,
+    fontFamily: 'Helvetica',
+    backgroundColor: '#ffffff',
+    color: '#164a3e'
   },
   headerBanner: {
     width: '100%',
@@ -45,42 +45,40 @@ const styles = StyleSheet.create({
     gap: 15,
   },
   logo: {
-    width: 65,
-    height: 65,
-    backgroundColor: '#ffffff',
-    borderRadius: 32.5,
-    padding: 6,
+    width: 70,
+    height: 70,
+    objectFit: 'contain',
   },
   headerTextContainer: {
     flexDirection: 'column',
     justifyContent: 'center',
   },
-  storeName: { 
-    fontSize: 26, 
-    fontWeight: 'bold', 
+  storeName: {
+    fontSize: 24,
+    fontWeight: 'bold',
     color: '#ffffff',
-    letterSpacing: 1,
+    letterSpacing: 0.5,
   },
-  storeSlogan: { 
-    fontSize: 10, 
-    color: '#acd038', 
+  storeSlogan: {
+    fontSize: 10,
+    color: '#acd038',
     marginTop: 4,
     fontStyle: 'italic',
   },
-  invoiceTitleWrapper: { 
+  invoiceTitleWrapper: {
     alignItems: 'flex-end',
     backgroundColor: 'rgba(22, 74, 62, 0.7)',
     padding: 10,
     borderRadius: 8,
   },
-  invoiceTitle: { 
-    fontSize: 24, 
-    fontWeight: 'bold', 
-    color: '#ffffff', 
-    letterSpacing: 2 
+  invoiceTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#ffffff',
+    letterSpacing: 2
   },
-  invoiceSubtitle: { 
-    fontSize: 12, 
+  invoiceSubtitle: {
+    fontSize: 12,
     color: '#fcb042',
     marginTop: 4,
   },
@@ -138,44 +136,66 @@ const styles = StyleSheet.create({
     color: '#acd038',
     textTransform: 'uppercase',
   },
-  table: { 
-    width: '100%', 
-    marginBottom: 30 
+  table: {
+    width: '100%',
+    marginBottom: 30
   },
-  tableHeader: { 
-    flexDirection: 'row', 
-    backgroundColor: '#164a3e', 
-    padding: 12, 
+  tableHeader: {
+    flexDirection: 'row',
+    backgroundColor: '#164a3e',
+    padding: 12,
     borderRadius: 6,
     marginBottom: 4,
   },
-  tableHeaderItem: { 
-    fontSize: 10, 
-    fontWeight: 'bold', 
-    color: '#ffffff', 
-    textTransform: 'uppercase' 
+  tableHeaderItem: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    color: '#ffffff',
+    textTransform: 'uppercase'
   },
-  tableRow: { 
-    flexDirection: 'row', 
-    borderBottomWidth: 1, 
-    borderBottomColor: '#ebebeb', 
+  tableRow: {
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ebebeb',
     padding: 12,
   },
   tableRowAlternate: {
     backgroundColor: '#f9fafb',
   },
-  col1: { width: '45%' },
-  col2: { width: '15%', textAlign: 'center' },
+  col1: { width: '35%' },
+  colHSN: { width: '15%', textAlign: 'center' },
+  col2: { width: '10%', textAlign: 'center' },
   col3: { width: '20%', textAlign: 'right' },
   col4: { width: '20%', textAlign: 'right' },
+  signatureContainer: {
+    marginTop: 30,
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+  },
+  signatureImage: {
+    width: 100,
+    height: 40,
+    objectFit: 'contain',
+    marginBottom: 5,
+  },
+  signatureLabel: {
+    fontSize: 10,
+    color: '#164a3e',
+    fontWeight: 'bold',
+    borderTopWidth: 1,
+    borderTopColor: '#164a3e',
+    paddingTop: 4,
+    width: 120,
+    textAlign: 'center',
+  },
   tableCell: { fontSize: 10, color: '#164a3e' },
   tableCellBold: { fontSize: 10, fontWeight: 'bold', color: '#164a3e' },
-  summaryContainer: { 
-    flexDirection: 'row', 
+  summaryContainer: {
+    flexDirection: 'row',
     justifyContent: 'flex-end',
     marginTop: 10,
   },
-  summaryBox: { 
+  summaryBox: {
     width: '55%',
     padding: 15,
     borderRadius: 8,
@@ -183,9 +203,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ebebeb',
   },
-  summaryRow: { 
-    flexDirection: 'row', 
-    justifyContent: 'space-between', 
+  summaryRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     paddingVertical: 5,
   },
   summaryLabel: { fontSize: 11, color: '#4b5563' },
@@ -195,47 +215,47 @@ const styles = StyleSheet.create({
     backgroundColor: '#ebebeb',
     marginVertical: 6,
   },
-  grandTotalRow: { 
-    flexDirection: 'row', 
-    justifyContent: 'space-between', 
+  grandTotalRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 4,
   },
   grandTotalLabel: { fontSize: 14, fontWeight: 'bold', color: '#164a3e' },
   grandTotalValue: { fontSize: 16, fontWeight: 'bold', color: '#fcb042' },
-  companyInfoContainer: { 
-    marginTop: 40, 
-    borderTopWidth: 1, 
-    borderTopColor: '#ebebeb', 
-    paddingTop: 15 
+  companyInfoContainer: {
+    marginTop: 40,
+    borderTopWidth: 1,
+    borderTopColor: '#ebebeb',
+    paddingTop: 15
   },
-  companyInfoTitle: { 
-    fontSize: 10, 
-    color: '#164a3e', 
-    fontWeight: 'bold', 
+  companyInfoTitle: {
+    fontSize: 10,
+    color: '#164a3e',
+    fontWeight: 'bold',
     marginBottom: 6,
     textTransform: 'uppercase'
   },
-  footerDecoration: { 
-    position: 'absolute', 
-    bottom: 50, 
-    left: 0, 
-    right: 0, 
-    height: 30 
+  footerDecoration: {
+    position: 'absolute',
+    bottom: 50,
+    left: 0,
+    right: 0,
+    height: 30
   },
-  footer: { 
-    position: 'absolute', 
-    bottom: 0, 
-    left: 0, 
-    right: 0, 
+  footer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
     height: 50,
     backgroundColor: '#164a3e',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  footerText: { 
-    fontSize: 10, 
+  footerText: {
+    fontSize: 10,
     color: '#ffffff',
   },
   footerHighlight: {
@@ -244,23 +264,23 @@ const styles = StyleSheet.create({
   }
 });
 
-const InvoiceDocument = ({ order, invoiceDate, iconBase64, bannerBase64 }: any) => (
+const InvoiceDocument = ({ order, invoiceDate, iconBase64, bannerBase64, signatureBase64 }: any) => (
   <Document>
     <Page size="A4" style={styles.page}>
-      
+
       {/* Header Banner */}
       <View style={styles.headerBanner}>
         {bannerBase64 ? (
           <Image src={bannerBase64} style={styles.bannerImage} />
         ) : (
-          <View style={{...styles.bannerImage, backgroundColor: '#164a3e'}} />
+          <View style={{ ...styles.bannerImage, backgroundColor: '#164a3e' }} />
         )}
-        
+
         {/* Header Content Overlay */}
         <View style={styles.headerContent}>
           <View style={styles.logoContainer}>
             {iconBase64 && (
-               <Image src={iconBase64} style={styles.logo} />
+              <Image src={iconBase64} style={styles.logo} />
             )}
             <View style={styles.headerTextContainer}>
               <Text style={styles.storeName}>{details.store.name}</Text>
@@ -285,7 +305,7 @@ const InvoiceDocument = ({ order, invoiceDate, iconBase64, bannerBase64 }: any) 
       </View>
 
       <View style={styles.mainContent}>
-        
+
         {/* Info Section */}
         <View style={styles.infoSection}>
           <View style={styles.infoBlock}>
@@ -293,22 +313,22 @@ const InvoiceDocument = ({ order, invoiceDate, iconBase64, bannerBase64 }: any) 
             <Text style={styles.infoTextBold}>{order.user_name || 'Guest Customer'}</Text>
             <Text style={styles.infoText}>{order.user_phone}</Text>
             {order.delivery_address && (
-               <Text style={styles.infoText}>{order.delivery_address}</Text>
+              <Text style={styles.infoText}>{order.delivery_address}</Text>
             )}
             {!order.delivery_address && (
-               <Text style={styles.infoText}>In-Store / Pickup</Text>
+              <Text style={styles.infoText}>In-Store / Pickup</Text>
             )}
           </View>
-          
+
           <View style={styles.infoBlock}>
             <Text style={styles.infoLabel}>Order Details</Text>
-            <Text style={styles.infoText}><Text style={{fontWeight: 'bold'}}>Invoice Date:</Text> {invoiceDate}</Text>
-            <Text style={styles.infoText}><Text style={{fontWeight: 'bold'}}>Ticket ID:</Text> {order.ticket_id}</Text>
-            <Text style={styles.infoText}><Text style={{fontWeight: 'bold'}}>Order Status:</Text> {order.status}</Text>
+            <Text style={styles.infoText}><Text style={{ fontWeight: 'bold' }}>Invoice Date:</Text> {invoiceDate}</Text>
+            <Text style={styles.infoText}><Text style={{ fontWeight: 'bold' }}>Ticket ID:</Text> {order.ticket_id}</Text>
+            <Text style={styles.infoText}><Text style={{ fontWeight: 'bold' }}>Order Status:</Text> {order.status}</Text>
             {order.admin_notes && (
-               <Text style={styles.infoText}><Text style={{fontWeight: 'bold'}}>Notes:</Text> {order.admin_notes}</Text>
+              <Text style={styles.infoText}><Text style={{ fontWeight: 'bold' }}>Notes:</Text> {order.admin_notes}</Text>
             )}
-            
+
             <View style={styles.badge}>
               <Text style={styles.badgeText}>{order.status}</Text>
             </View>
@@ -319,20 +339,22 @@ const InvoiceDocument = ({ order, invoiceDate, iconBase64, bannerBase64 }: any) 
         <View style={styles.table}>
           <View style={styles.tableHeader}>
             <Text style={[styles.tableHeaderItem, styles.col1]}>Item Description</Text>
+            <Text style={[styles.tableHeaderItem, styles.colHSN]}>HSN/SAC</Text>
             <Text style={[styles.tableHeaderItem, styles.col2]}>Qty</Text>
             <Text style={[styles.tableHeaderItem, styles.col3]}>Unit Price</Text>
             <Text style={[styles.tableHeaderItem, styles.col4]}>Total</Text>
           </View>
-          
+
           {order.order_items?.map((item: any, i: number) => (
             <View style={[styles.tableRow, i % 2 !== 0 ? styles.tableRowAlternate : {}]} key={i}>
               <Text style={[styles.tableCell, styles.col1]}>{item.product_name || 'Item'}</Text>
+              <Text style={[styles.tableCell, styles.colHSN]}>{item.hsn_sac || ''}</Text>
               <Text style={[styles.tableCellBold, styles.col2]}>{item.quantity}</Text>
               <Text style={[styles.tableCell, styles.col3]}>₹ {item.price_at_time}</Text>
               <Text style={[styles.tableCellBold, styles.col4]}>₹ {(item.quantity * item.price_at_time).toFixed(2)}</Text>
             </View>
           ))}
-          
+
           {(!order.order_items || order.order_items.length === 0) && (
             <View style={styles.tableRow}>
               <Text style={styles.tableCell}>No items found for this order.</Text>
@@ -349,7 +371,11 @@ const InvoiceDocument = ({ order, invoiceDate, iconBase64, bannerBase64 }: any) 
             </View>
             <View style={styles.summaryRow}>
               <Text style={styles.summaryLabel}>Discount</Text>
-              <Text style={styles.summaryValue}>₹ 0.00</Text>
+              <Text style={styles.summaryValue}>₹ {order.discount || '0.00'}</Text>
+            </View>
+            <View style={styles.summaryRow}>
+              <Text style={styles.summaryLabel}>Customization Charge</Text>
+              <Text style={styles.summaryValue}>₹ {order.customization_charge || '0.00'}</Text>
             </View>
             <View style={styles.summaryRow}>
               <Text style={styles.summaryLabel}>Taxes</Text>
@@ -360,19 +386,27 @@ const InvoiceDocument = ({ order, invoiceDate, iconBase64, bannerBase64 }: any) 
 
             <View style={styles.grandTotalRow}>
               <Text style={styles.grandTotalLabel}>Grand Total</Text>
-              <Text style={styles.grandTotalValue}>₹ {order.total_amount}</Text>
+              <Text style={styles.grandTotalValue}> ₹ {order.total_amount}</Text>
             </View>
           </View>
         </View>
-        
+
         {/* Company Info */}
         <View style={styles.companyInfoContainer}>
           <Text style={styles.companyInfoTitle}>Company Information</Text>
           <Text style={styles.infoText}>{details.store.name}</Text>
           <Text style={styles.infoText}>{details.location.address}, {details.location.city}, {details.location.postalCode}</Text>
+          <Text style={styles.infoText}>FSSAI Lic. No. - 12825028000004</Text>
           <Text style={styles.infoText}>Email: {details.contact.email} | Phone: {details.contact.primaryPhone}</Text>
           {details.social && details.social.instagram && (
             <Text style={styles.infoText}>Instagram: {details.social.instagram}</Text>
+          )}
+
+          {signatureBase64 && (
+            <View style={styles.signatureContainer}>
+              <Image src={signatureBase64} style={styles.signatureImage} />
+              <Text style={styles.signatureLabel}>Authorized Signature</Text>
+            </View>
           )}
         </View>
 
@@ -380,19 +414,19 @@ const InvoiceDocument = ({ order, invoiceDate, iconBase64, bannerBase64 }: any) 
 
       {/* Footer SVG Decoration */}
       <View style={styles.footerDecoration}>
-          <Svg viewBox="0 0 1440 320" preserveAspectRatio="none" style={{ width: '100%', height: '100%' }}>
-            <Path
-              fill="#164a3e"
-              d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,165.3C1248,171,1344,149,1392,138.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
-            />
-          </Svg>
+        <Svg viewBox="0 0 1440 320" preserveAspectRatio="none" style={{ width: '100%', height: '100%' }}>
+          <Path
+            fill="#164a3e"
+            d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,165.3C1248,171,1344,149,1392,138.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+          />
+        </Svg>
       </View>
 
       {/* Footer */}
       <View style={styles.footer}>
         <Text style={styles.footerText}>Thank you for your business. <Text style={styles.footerHighlight}>Let's bliss together!</Text></Text>
       </View>
-      
+
     </Page>
   </Document>
 );
@@ -423,6 +457,16 @@ export async function GET(request: Request) {
   // Convert local images to base64 for React-PDF
   let iconBase64 = undefined;
   let bannerBase64 = undefined;
+  let signatureBase64 = undefined;
+
+  try {
+    const signaturePath = path.join(process.cwd(), 'public', 'signature.png');
+    if (fs.existsSync(signaturePath)) {
+      signatureBase64 = `data:image/png;base64,${fs.readFileSync(signaturePath).toString('base64')}`;
+    }
+  } catch (e) {
+    console.warn('Could not load signature.png for PDF');
+  }
 
   try {
     const iconPath = path.join(process.cwd(), 'public', 'icon.png');
@@ -444,11 +488,12 @@ export async function GET(request: Request) {
 
   try {
     const stream = await renderToStream(
-      <InvoiceDocument 
-        order={order} 
-        invoiceDate={invoiceDate} 
-        iconBase64={iconBase64} 
-        bannerBase64={bannerBase64} 
+      <InvoiceDocument
+        order={order}
+        invoiceDate={invoiceDate}
+        iconBase64={iconBase64}
+        bannerBase64={bannerBase64}
+        signatureBase64={signatureBase64}
       />
     );
 
