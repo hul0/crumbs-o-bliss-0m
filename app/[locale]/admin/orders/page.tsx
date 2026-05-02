@@ -9,7 +9,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
-import { Eye } from 'lucide-react'
+import { Eye, Plus } from 'lucide-react'
 import Link from 'next/link'
 import { OrderStatusBadge } from '@/components/admin/order-status-badge'
 import { Card, CardContent } from '@/components/ui/card'
@@ -29,9 +29,17 @@ export default async function AdminOrdersPage({ params }: { params: Promise<{ lo
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-3 duration-500">
-      <div className="flex flex-col gap-2 pb-6 border-b border-border/40">
-        <h1 className="text-3xl font-bold tracking-tight text-foreground italic">Customer Orders</h1>
-        <p className="text-muted-foreground text-sm">Reviewing {orders?.length || 0} total requests from your shop.</p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-border/40">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground italic">Customer Orders</h1>
+          <p className="text-muted-foreground text-sm mt-1">Reviewing {orders?.length || 0} total requests from your shop.</p>
+        </div>
+        <Button asChild className="rounded-xl font-bold text-xs tracking-widest uppercase h-10 px-6 shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98]">
+          <Link href={`/${locale}/admin/orders/new`}>
+            <Plus className="mr-2 h-4 w-4" />
+            Add Manual Order
+          </Link>
+        </Button>
       </div>
 
       <div className="border rounded-2xl bg-card shadow-sm overflow-hidden hidden md:block">

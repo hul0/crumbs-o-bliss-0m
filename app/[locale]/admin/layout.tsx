@@ -2,13 +2,13 @@
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { 
-  LayoutDashboard, 
-  ShoppingBag, 
-  Pizza, 
-  Gift, 
-  Image as ImageIcon, 
-  LogOut, 
+import {
+  LayoutDashboard,
+  ShoppingBag,
+  Pizza,
+  Gift,
+  Image as ImageIcon,
+  LogOut,
   Menu,
   ExternalLink,
   ChevronRight
@@ -71,7 +71,7 @@ export default async function AdminLayout({
               </div>
               <ChevronRight className="h-3.3 w-3.2 opacity-0 group-hover:opacity-100 transition-opacity" />
             </Link>
-            
+
             {!isManager && (
               <>
                 <Link
@@ -80,7 +80,7 @@ export default async function AdminLayout({
                 >
                   <div className="flex items-center gap-3">
                     <Pizza className="h-4 w-4 text-primary" />
-                    <span>Menu Items</span>
+                    <span>Items</span>
                   </div>
                   <ChevronRight className="h-3.3 w-3.2 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </Link>
@@ -106,7 +106,7 @@ export default async function AdminLayout({
                 </Link>
               </>
             )}
-            
+
             <Link
               href={`/${locale}/admin/orders`}
               className="flex items-center justify-between rounded-xl px-3 py-2.5 text-sm font-medium transition-all hover:bg-muted group"
@@ -122,16 +122,16 @@ export default async function AdminLayout({
           <div className="mt-8">
             <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4 px-2">Shortcut</div>
             <Link
-                href={`/${locale}`}
-                target="_blank"
-                className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all hover:bg-muted text-muted-foreground hover:text-foreground"
+              href={`/${locale}`}
+              target="_blank"
+              className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all hover:bg-muted text-muted-foreground hover:text-foreground"
             >
-                <ExternalLink className="h-4 w-4" />
-                <span>View Website</span>
+              <ExternalLink className="h-4 w-4" />
+              <span>View Website</span>
             </Link>
           </div>
         </div>
-        
+
         <div className="mt-auto p-4 border-t border-border/40 bg-muted/30">
           <form action="/auth/signout" method="post">
             <button className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-red-500 transition-all hover:bg-red-50 dark:hover:bg-red-950/20 w-full group">
@@ -159,7 +159,7 @@ export default async function AdminLayout({
                 <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold">C</div>
                 Admin Panel
               </SheetTitle>
-              
+
               <nav className="flex flex-col gap-2 flex-1">
                 <Link
                   href={`/${locale}/admin`}
@@ -175,7 +175,7 @@ export default async function AdminLayout({
                       className="flex items-center gap-4 py-3 px-4 rounded-xl hover:bg-muted transition-colors font-medium"
                     >
                       <Pizza className="h-5 w-5 text-primary" />
-                      Menu Items
+                      Items
                     </Link>
                     <Link
                       href={`/${locale}/admin/catalogues`}
@@ -204,11 +204,11 @@ export default async function AdminLayout({
 
               <div className="mt-auto space-y-4 pt-6 border-t">
                 <Link
-                    href={`/${locale}`}
-                    className="flex items-center gap-4 py-3 px-4 rounded-xl hover:bg-muted transition-colors font-medium text-muted-foreground"
+                  href={`/${locale}`}
+                  className="flex items-center gap-4 py-3 px-4 rounded-xl hover:bg-muted transition-colors font-medium text-muted-foreground"
                 >
-                    <ExternalLink className="h-5 w-5" />
-                    Visit Website
+                  <ExternalLink className="h-5 w-5" />
+                  Visit Website
                 </Link>
                 <form action="/auth/signout" method="post">
                   <button className="flex items-center gap-4 py-3 px-4 rounded-xl hover:bg-red-50 text-red-500 transition-colors font-medium w-full text-left">
@@ -222,11 +222,11 @@ export default async function AdminLayout({
 
           <div className="ml-auto flex items-center gap-3">
             <div className="text-right hidden sm:block">
-                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest leading-tight">Access Level</p>
-                <p className="text-xs font-semibold text-primary capitalize">{profile.role}</p>
+              <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest leading-tight">Access Level</p>
+              <p className="text-xs font-semibold text-primary capitalize">{profile.role}</p>
             </div>
             <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20">
-                <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+              <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
             </div>
           </div>
         </header>
